@@ -1,7 +1,6 @@
 // import {useState } from 'react'
 // import { useSocket } from './context/SocketProvider';
-import Navigation from "../components/Navigation/Navigation";
-import Homepage from "./Home/all/page";
+import ChatList from "../../../components/ChatList/ChatList";
 const page = () => {
   // const {sendMessage,messages} = useSocket();
   // const [message,setMessage] = useState('');
@@ -11,7 +10,9 @@ const page = () => {
   // }
 
   return (
-    <div className="w-full h-full no-scrollbar">{/* <Navigation/> */}</div>
+    <div className="w-full h-full px-5 pt-2  bg-blue-50">
+      <ChatList />
+    </div>
   );
 };
 
