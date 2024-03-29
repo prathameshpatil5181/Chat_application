@@ -1,0 +1,10 @@
+import { Router } from "express";
+const authRouter = Router();
+import { LoginController } from "../Controllers/LoginController";
+import { SignupController } from "../Controllers/SignupController";
+import { authMiddleware } from "../middleware/authMiddleware";
+import { getConnections } from "../Controllers/getConnection";
+authRouter.post("/login",LoginController);
+authRouter.post("/signup", SignupController);
+authRouter.get("/getConnections",authMiddleware,getConnections);
+export default authRouter;

@@ -3,7 +3,7 @@ import ChatNav from "../../../components/ChatPage/ChatNav";
 const Chatpage = () => {
   return (
     <div className="w-full h-full grid grid-flow-row grid-rows-[8%,92%] m-0 bg-blue-50">
-      <div className="h-fit">
+      <div className="h-full w-full">
         <ChatNav />
       </div>
       <div className="w-full h-full">

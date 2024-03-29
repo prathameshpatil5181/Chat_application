@@ -1,40 +1,99 @@
 "use client";
-import React from "react";
-import { io } from "socket.io-client";
+import React, { useState } from "react";
+import { io, Socket } from "socket.io-client";
 import { useEffect, useRef } from "react";
-const InputComponent = () => {
-  const socket = io('http://localhost:8000/');
-  const inputRef = useRef<HTMLInputElement>(null);
+import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { SocketActions } from "../../Store/Slices/SocketSlice";
+// import SocketClass from "../../SocketUtil/Socket";
+
+import socket from "../../SocketUtil/Socket";
+interface InputComponentInterface {
+  messages: string[];
+  setMessages: (meassage: string) => void;
+}
+
+// interface Rootstate{
+//   soc:{
+//     SocketIo:SocketClass
+//   }
+// }
+
+const InputComponent: React.FC<InputComponentInterface> = ({
+  messages,
+  setMessages,
+}) => {
+  const [socketio, setsocketio] = useState<Socket>();
+  const route = useRouter();
+  // const socket = useSelector((state: Rootstate) => state.soc.SocketIo);
+  const param = useParams();
+  const dispatch = useDispatch();
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  // useEffect(() => {
+  //   if (!localStorage.getItem("auth")) {
+  //     route.push("/login");
+  //   }
+
+  //   const socket: Socket = io("http://localhost:8000/", {
+  //     withCredentials: true,
+  //   });
+  //   setsocketio(socket);
+  //   socket.on("chat", (receiveMessage) => {
+  //     console.log(receiveMessage);
+  //     setMessages(receiveMessage);
+  //   });
+
+  //   return () => {
+  //     socket.disconnect();
+  //     socket.off("chat");
+  //     setsocketio(undefined);
+  //   };
+  // }, []);
+
   useEffect(() => {
-      socket.on('message',message=>{
-        console.log(message);
-      })
-  }, [socket]);
+    // setsocketio(socket.socket);
+    // console.log(socket.socket);
+    // socketio?.on("chat", (receiveMessage: string) => {
+    //   console.log(receiveMessage);
+    //   setMessages(receiveMessage);
+    // });
+    // socket.sendMessage();
 
+    return () => {};
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("submit");
-    socket.emit("message",inputRef.current?.value);
+    console.log(param.name);
+    // dispatch(SocketActions.sendMessage());
+    // socket.emit("chat", {
+    //   message: inputRef.current?.value,
+    //   userName: localStorage.getItem("send"),
+    // });
+
+    socket.emit("chat", "hii");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="flex flex-row w-full gap-2 bg-white">
-        <div className="w-[95%]">
-          <input
-            type="text"
-            className=" w-[100%] h-12 rounded-3xl bg-slate-200
-          outline-0 caret-transparent cursor-text px-3"
+    <form onSubmit={handleSubmit} className="bg-slate-100">
+      <div className="flex flex-row w-full gap-2  bg-slate-100">
+        <div className="w-[95%]  h-[6vh] rounded-3xl bg-white p-1 ">
+          <textarea
+            style={{
+              whiteSpace: "pre-wrap",
+              overflowWrap: "break-word",
+              resize: "none",
+            }}
+            className=" w-[100%] rounded-3xl bg-white
+          outline-0 h-full  px-3 whitespace-pre-wrap text-wrap text-justify text-md"
             placeholder="Message..."
             ref={inputRef}
           />
         </div>
         <div>
-          <button
-            onClick={handleSubmit}
-            className="bg-white rounded-full h-12 w-12 flex items-center justify-center   "
-          >
+          <button className="bg-white rounded-full h-12 w-12 flex items-center justify-center ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="30"

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Montserrat:wght@600&family=Nunito&family=Oleo+Script:wght@400;700&family=Varela+Round&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Montserrat:wght@600&family=Nunito&family=Oleo+Script:wght@400;700&family=Dosis:wght@500&family=Poppins:ital,wght@400&family=Varela+Round&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,7 +7,7 @@ body {
   box-sizing: border-box;
   padding: 0;
   border: 0;
-  font-family: "Varela Round", sans-serif;
+  font-family: "Poppins", sans-serif;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
