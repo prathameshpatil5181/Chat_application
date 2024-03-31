@@ -1,9 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Socket,io } from "socket.io-client";
-import SocketClass from "../../SocketUtil/Socket";
+import { Socket, io } from "socket.io-client";
 const initialState = {
-  socketIo:Socket
-}
+  socketIo: Socket,
+};
 
 const SocketSlice = createSlice({
   name: "SocketSlice",
@@ -13,10 +12,10 @@ const SocketSlice = createSlice({
       console.log(action.payload.socket);
       state.socketIo = action.payload.socket;
     },
-    sendMessage(state){
+    sendMessage(state) {
       //@ts-ignore
-      state.socketIo.emit('chat','hii');
-    }
+      state.socketIo.emit("chat", "hii");
+    },
   },
 });
 

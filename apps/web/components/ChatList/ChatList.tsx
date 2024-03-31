@@ -21,7 +21,7 @@ const ChatList: React.FC = () => {
 
         if (jsonResponse.connections.length !== 0) {
           setConnections(jsonResponse.connections);
-          localStorage.setItem('send',jsonResponse.connections[0]);
+          localStorage.setItem("send", jsonResponse.connections[0]);
         }
       } catch (error) {
         console.log(error);
@@ -41,6 +41,11 @@ const ChatList: React.FC = () => {
             </Link>
           </li>
         ))}
+        <li>
+          <Link href={`/Home/test`}>
+            <ChatCard />
+          </Link>
+        </li>
       </ul>
     </div>
   );

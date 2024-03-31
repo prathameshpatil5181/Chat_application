@@ -74,9 +74,10 @@ class SocketService {
   const username = socket.handshake.auth.username;
     // const id = await getUserSocketId(username);
     socket.on("chat", async({message,userName}) => {
-      const id = await getUserSocketId(userName);
-      this._io.to(id).emit("chat", message);
-      this._io.to(socket.id).emit("chat", message);
+      // const id = await getUserSocketId(userName);
+      // this._io.to(id).emit("chat", message);
+      // this._io.to(socket.id).emit("chat", message);
+      this._io.emit('chat',message);
       // await pub.publish('MESSAGES',JSON.stringify({message}))
     });
     // socket.on("chat", (message: string) => {

@@ -5,9 +5,7 @@
 import { useEffect, useMemo } from "react";
 import ChatList from "../../../components/ChatList/ChatList";
 import { useDispatch } from "react-redux";
-import { SocketActions } from "../../../Store/Slices/SocketSlice";
-import { io } from "socket.io-client";
-import SocketClass from "../../../SocketUtil/Socket";
+import socket from "../../../SocketUtil/Socket";
 const page = () => {
   // const {sendMessage,messages} = useSocket();
   // const [message,setMessage] = useState('');
@@ -22,13 +20,11 @@ const page = () => {
     // const Io = io("http://localhost:8000/", {
     //   withCredentials: true,
     // });
-
     // dispatch(
     //   SocketActions.setSocketConnection({
     //     socket: Io
     //   })
     // );
-
     // const Io = new SocketClass();
     // dispatch(
     //   SocketActions.setSocketConnection({
@@ -44,6 +40,11 @@ const page = () => {
     //   Io.get().disconnect();
     //   Io.get().off("chat");
     // };
+
+    socket.on("chat", (message) => {
+      console.log(message);
+    });
+
   }, []);
 
   return (

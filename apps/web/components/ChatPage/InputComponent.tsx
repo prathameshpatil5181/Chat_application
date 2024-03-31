@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { io, Socket } from "socket.io-client";
+
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { SocketActions } from "../../Store/Slices/SocketSlice";
 // import SocketClass from "../../SocketUtil/Socket";
-
+import { Socket } from "socket.io-client";
 import socket from "../../SocketUtil/Socket";
 interface InputComponentInterface {
   messages: string[];
@@ -73,7 +73,7 @@ const InputComponent: React.FC<InputComponentInterface> = ({
     //   userName: localStorage.getItem("send"),
     // });
 
-    socket.emit("chat", "hii");
+    socket.emit("chat", inputRef.current?.value);
   };
 
   return (
