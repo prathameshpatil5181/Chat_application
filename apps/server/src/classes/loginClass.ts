@@ -28,7 +28,7 @@ export class loginClass {
         return false;
       }
 
-      const token = await Encryption.generateJwt(user.emailId, user.name);
+      const token = await Encryption.generateJwt(user.emailId, user.name,user.id);
 
       return token;
     } catch (error) {

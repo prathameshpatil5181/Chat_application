@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Socket, io } from "socket.io-client";
+
 const initialState = {
-  socketIo: Socket,
+  isConnected: false,
 };
 
 const SocketSlice = createSlice({
@@ -9,8 +9,11 @@ const SocketSlice = createSlice({
   initialState,
   reducers: {
     setSocketConnection(state, action) {
-      console.log(action.payload.socket);
-      state.socketIo = action.payload.socket;
+      state.isConnected = action.payload;
+      console.log('Socket Connected');
+    },
+    receivedMessage() {
+      console.log('received');
     },
     sendMessage(state) {
       //@ts-ignore

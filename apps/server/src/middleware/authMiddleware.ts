@@ -16,18 +16,15 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   // Get the JWT token from the request cookie or header
-  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
-  console.log(token);
+  const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({ message: "Unauthorized: No token provided" });
   }
 
   try {
-    console.log(token);
     // Verify the JWT token and decode it
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
     // Attach the decoded token to the request object
-    console.log(decodedToken);
     req.body.user = decodedToken;
     next();
   } catch (error) {

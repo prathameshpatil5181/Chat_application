@@ -1,7 +1,14 @@
-import { Encryption } from "../classes/BcryptClass";
-import Prisma from "./Prisma";
+import { error } from "console";
+import { Encryption } from "../../classes/BcryptClass";
+import Prisma from "../Prisma";
 
 const jwt = require("jsonwebtoken");
+
+interface Isignupuser {
+  result: boolean;
+  status?: string;
+}
+
 export class authclass {
   private email: string;
   private password: string;
@@ -13,9 +20,9 @@ export class authclass {
     this.name = name;
   }
 
-  async signUpUser(): Promise<string | boolean> {
-    const validation: string | boolean = this.validate();
-    if (validation != true) return validation;
+  async signUpUser(): Promise<Isignupuser> {
+    const validation: Isignupuser = this.validate();
+    if (validation.result != true) return validation;
 
     //if user already exits here
     try {
@@ -35,17 +42,34 @@ export class authclass {
             name: this.name,
           },
         });
-        return Encryption.generateJwt(this.email, this.name);
       } else {
-        return "user already exist";
+        return { result: false, status: "user already exist" };
       }
       // console.log(user);
     } catch (error) {
       throw error;
     }
+
+     const user = await Prisma.userCredentials.findUnique({
+       where: {
+         emailId: this.email
+       },
+     });
+    
+    if (!user) {
+      throw new Error('user not found');
+    }
+      return {
+          result: true,
+          status: await Encryption.generateJwt(
+            user.emailId,
+            user.name,
+            user.id,
+          ),
+        };
   }
 
-  validate(): string | boolean {
+  validate(): Isignupuser {
     // Define regular expressions for each password rule
     const minLengthRegex = /.{8,}/; // Minimum 8 characters
     const uppercaseRegex = /[A-Z]/; // At least one uppercase letter
@@ -53,20 +77,32 @@ export class authclass {
 
     // Check if password meets each rule
     if (this.password.length <= 8) {
-      return "Password must be at least 8 characters long";
+      return {
+        result: false,
+        status: "Password must be at least 8 characters long",
+      };
     }
     if (!uppercaseRegex.test(this.password)) {
-      return "Password must contain at least one uppercase letter";
+      return {
+        result: false,
+        status: "Password must contain at least one uppercase letter",
+      };
     }
     if (!specialCharRegex.test(this.password)) {
-      return "Password must contain at least one special character";
+      return {
+        result: false,
+        status: "Password must contain at least one special character",
+      };
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Check if the email matches the regular expression
     if (!emailRegex.test(this.email)) {
-      return "Invalid email address";
+      return {
+        result: false,
+        status: "Invalid email address",
+      };
     }
 
     const nameRegex = /^[a-zA-Z\- ]+$/;
@@ -77,10 +113,15 @@ export class authclass {
       this.name === undefined ||
       this.name === null
     ) {
-      return "Invalid name";
+      return {
+        result: false,
+        status: "Invalid name",
+      };
     }
 
-    return true;
+    return {
+      result: true,
+    };
   }
 
   get values(): { name: string; email: string; password: string } {

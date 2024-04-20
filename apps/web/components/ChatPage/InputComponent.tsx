@@ -1,79 +1,29 @@
 "use client";
-import React, { useState } from "react";
 
 import { useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
-import { SocketActions } from "../../Store/Slices/SocketSlice";
-// import SocketClass from "../../SocketUtil/Socket";
-import { Socket } from "socket.io-client";
-import socket from "../../SocketUtil/Socket";
-interface InputComponentInterface {
-  messages: string[];
-  setMessages: (meassage: string) => void;
-}
 
-// interface Rootstate{
-//   soc:{
-//     SocketIo:SocketClass
-//   }
-// }
+import { sendWsMessage } from "../../Store/Slices/socketActions";
+import { useAppDispatch, useAppSelector } from "../../Store/hooks";
 
-const InputComponent: React.FC<InputComponentInterface> = ({
-  messages,
-  setMessages,
-}) => {
-  const [socketio, setsocketio] = useState<Socket>();
-  const route = useRouter();
-  // const socket = useSelector((state: Rootstate) => state.soc.SocketIo);
-  const param = useParams();
-  const dispatch = useDispatch();
+const InputComponent: React.FC = () => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  // useEffect(() => {
-  //   if (!localStorage.getItem("auth")) {
-  //     route.push("/login");
-  //   }
-
-  //   const socket: Socket = io("http://localhost:8000/", {
-  //     withCredentials: true,
-  //   });
-  //   setsocketio(socket);
-  //   socket.on("chat", (receiveMessage) => {
-  //     console.log(receiveMessage);
-  //     setMessages(receiveMessage);
-  //   });
-
-  //   return () => {
-  //     socket.disconnect();
-  //     socket.off("chat");
-  //     setsocketio(undefined);
-  //   };
-  // }, []);
+  const dispatch = useAppDispatch();
+  const to = useAppSelector((state) => state.sender.id);
 
   useEffect(() => {
-    // setsocketio(socket.socket);
-    // console.log(socket.socket);
-    // socketio?.on("chat", (receiveMessage: string) => {
-    //   console.log(receiveMessage);
-    //   setMessages(receiveMessage);
-    // });
-    // socket.sendMessage();
-
     return () => {};
   }, []);
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("submit");
-    console.log(param.name);
-    // dispatch(SocketActions.sendMessage());
-    // socket.emit("chat", {
-    //   message: inputRef.current?.value,
-    //   userName: localStorage.getItem("send"),
-    // });
-
-    socket.emit("chat", inputRef.current?.value);
+    if (!inputRef.current?.value) return;
+    dispatch(
+      sendWsMessage({
+        to: to,
+        message: inputRef.current?.value,
+      })
+    );
+    inputRef.current.value = "";
   };
 
   return (

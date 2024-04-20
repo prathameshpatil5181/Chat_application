@@ -1,4 +1,4 @@
-import { getConnectionsSocket } from "../Models/storeUserMessage";
+import { getConnectionsSocket,getuserdata } from "../../Models/storeUserMessage";
 import { Request, Response, NextFunction } from "express";
 interface DecodedToken {
   userId: string;
@@ -11,14 +11,13 @@ export interface CustomRequest extends Request {
 }
 export const getConnections = async (req: Request, res: Response) => {
   const userId = req.body.user;
-
   console.log(userId);
   if (userId) {
     const userConnections = await getConnectionsSocket(userId.email);
     //@ts-ignore
-    const userIds = userConnections.connections.split(" ");
+
     return res.status(200).json({
-      connections: userIds,
+      connections: userConnections,
     });
   }
   return res.status(404).json({

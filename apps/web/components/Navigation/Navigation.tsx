@@ -1,27 +1,20 @@
 import React from "react";
-import Options from "./OptionsModel/Options";
+import SearchSvg from "../../SVG/footersvg/SearchSvg";
 const Navigation: React.FC = () => {
   return (
-    <div className="h-full w-full bg-white">
+    <div className="h-full w-full bg-white font-medium">
       <nav className="h-full w-full p-5 flex flex-col gap-6">
-        <div className="grid grid-cols-2 items-center w-full h-full   rounded-2xl ">
-          <h1
-            className="justify-start text-3xl"
-            style={{ fontFamily: "Oleo Script" }}
-          >
-            Samwad
-          </h1>
-
-          <div className="justify-self-end relative">
-            <Options />
+        <div className="grid grid-cols-[10%,90%] items-center w-full h-fit rounded-2xl bg-slate-50">
+          <div className="justify-self-center w-fit ">
+            <SearchSvg />
           </div>
-        </div>
-        <div className="h-full w-full">
-          <ul className="grid grid-flow-col">
-            <li className="justify-self-start">Chat</li>
-            <li className="justify-self-center">Update</li>
-            <li className="justify-self-end">Calls</li>
-          </ul>
+          <div>
+            <input
+              type="text"
+              className="rounded-xl bg-slate-50 focus:outline-none px-2 w-full h-12"
+              placeholder="Search your chat"
+            />
+          </div>
         </div>
       </nav>
     </div>

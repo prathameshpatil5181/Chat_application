@@ -1,10 +1,11 @@
 import { Router } from "express";
 const authRouter = Router();
-import { LoginController } from "../Controllers/LoginController";
-import { SignupController } from "../Controllers/SignupController";
+import { LoginController } from "../Controllers/authControllers/LoginController";
+import { SignupController } from "../Controllers/authControllers/SignupController";
 import { authMiddleware } from "../middleware/authMiddleware";
-import { getConnections } from "../Controllers/getConnection";
-authRouter.post("/login",LoginController);
+import { getConnections } from "../Controllers/UserContrllers/getConnection";
+authRouter.post("/login", LoginController);
 authRouter.post("/signup", SignupController);
-authRouter.get("/getConnections",authMiddleware,getConnections);
+authRouter.get("/getConnections", authMiddleware, getConnections);
+authRouter.get("/validate", authMiddleware);
 export default authRouter;

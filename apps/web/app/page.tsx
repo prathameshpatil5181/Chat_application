@@ -1,30 +1,33 @@
-// import {useState } from 'react'
-// import { useSocket } from './context/SocketProvider';
+
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 const page = () => {
-  // const {sendMessage,messages} = useSocket();
-  // const [message,setMessage] = useState('');
-
-  // const changeHandler= (e:React.ChangeEvent<HTMLInputElement>)=>{
-  //   setMessage(e.target.value);
-  // }
+ 
   const router = useRouter();
 
-  useEffect(() => {
-    console.log(localStorage.getItem("authToken"));
-    if (localStorage.getItem("authToken")) {
-      router.push("/Home/all");
-      return;
-    }
+  const RedirectHandler = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/auth/validate", {
+        credentials:'include'
+      });
 
-    router.push("/login");
+      if (response.status === 401) {
+        router.push("/login");
+        return;
+      }
+      router.push("/Home/all");
+    } catch (error) {
+      console.error(error);
+      throw Error;
+    }
+  };
+
+  useEffect(() => {
+    RedirectHandler();
   }, []);
 
-  return (
-    <div className="w-full h-full no-scrollbar"></div>
-  );
+  return <div className="w-full h-full no-scrollbar"></div>;
 };
 
 export default page;

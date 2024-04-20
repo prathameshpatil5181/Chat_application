@@ -29,7 +29,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     (msg) => {
       console.log("send message", msg);
       if (socket) {
-        socket.emit("event:message", { message: msg });
+        socket.emit("chat", { message: msg });
       }
     },
     [socket]
@@ -42,12 +42,14 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const _socket = io("http://localhost:8000");
-    _socket.on("message", onMessageRec);
+    const _socket = io("http://localhost:8000",{
+      withCredentials:true,
+    });
+    _socket.on("chat", onMessageRec);
     setSocket(_socket);
     return () => {
       _socket.disconnect();
-      _socket.off("message", onMessageRec);
+      _socket.off("chat", onMessageRec);
       setSocket(undefined);
     };
   }, []);

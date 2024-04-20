@@ -1,51 +1,38 @@
 "use client";
 import ChatCard from "../ChatCard/ChatCard";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { useAppSelector } from "../../Store/hooks";
+interface Iconnections {
+  emailId: string;
+  name: string;
+  id: string;
+}
+
 const ChatList: React.FC = () => {
-  const [connections, setConnections] = useState<string[]>([]);
+  const router = useRouter();
+  const conns = useAppSelector((state) => state.userCon.users);
 
-  useEffect(() => {
-    const getConnections = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:8000/auth/getConnections",
-          {
-            method: "GET",
-            credentials: "include",
-            // should be there
-          }
-        );
+  const chatHandler = (user: Iconnections) => {
+    router.push(`/Home/${user.id}`);
+  };
 
-        const jsonResponse = await response.json();
-
-        if (jsonResponse.connections.length !== 0) {
-          setConnections(jsonResponse.connections);
-          localStorage.setItem("send", jsonResponse.connections[0]);
-        }
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    };
-    getConnections();
-  }, []);
+  if (conns.length === 0) {
+    return <div>Loading.....</div>;
+  }
 
   return (
-    <div className="h-[100vh] w-full no-scrollbar bg-blue-50 overflow-x-scroll">
+    <div className="h-[100vh] w-full no-scrollbar overflow-x-scroll">
       <ul className="grid grid-flow-row  gap-5 ">
-        {connections.map((x) => (
-          <li>
-            <Link href={`/Home/${x}`}>
-              <ChatCard />
-            </Link>
+        {conns.map((x, index) => (
+          <li key={index} onClick={() => chatHandler(x)}>
+            <ChatCard
+              name={x.name}
+              lastchat={`hii from ${x.name}`}
+              lasttime="11:20"
+            />
           </li>
         ))}
-        <li>
-          <Link href={`/Home/test`}>
-            <ChatCard />
-          </Link>
-        </li>
       </ul>
     </div>
   );

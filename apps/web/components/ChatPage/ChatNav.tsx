@@ -3,13 +3,13 @@ import React from "react";
 import profileimage from "../../public/profile.jpg";
 import Image from "next/image";
 import MenuThreeDots from "../../SVG/MenuThreeDots";
-import { useParams } from "next/navigation";
+import { useAppSelector } from "../../Store/hooks";
 const ChatNav: React.FC = () => {
-  const name = useParams<{ tag: string; item: string; name: string }>();
+  const name = useAppSelector((state) => state.sender.name);
   return (
     <div className="p-1 border-b-1 border-gray-400 bg-white h-full w-full">
       <nav className="grid grid-cols-[20%,75%,5%] items-center p-1">
-        <div className="w-14 h-14 rounded-[50%] p-[2px] justify-self-start border border-black">
+        <div className="w-14 h-14 rounded-[50%] p-[2px] justify-self-start border border-black ">
           <Image
             src={profileimage}
             alt="profileImage"
@@ -17,7 +17,7 @@ const ChatNav: React.FC = () => {
           />
         </div>
         <div className="justify-self-start grow">
-          <h1>{name.name}</h1>
+          <h1>{name}</h1>
         </div>
         <div className="justify-self-end">
           <MenuThreeDots />

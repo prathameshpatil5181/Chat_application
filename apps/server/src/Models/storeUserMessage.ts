@@ -63,17 +63,49 @@ export const getUserSocketId =async(userName:string):Promise<string|string[]>=>{
   catch(error) {throw error;}
 }
 
-export const getConnectionsSocket = async(userName:string)=>{
+export const getConnectionsSocket = async(email:string)=>{
 
   try{
 
-    const user = await Prisma.socketConnections.findUnique({ 
+    const user = await Prisma.userCredentials.findUnique({ 
+      select: {
+        connections:true
+      },
       where:{
-        userName:userName,
+        emailId:email,
       }
      });
 
-     if(user){
+    if (user) {
+      const userIds = user.connections;
+      const userData = await getuserdata(userIds);
+      return userData;
+     }
+  
+    return 'User not Found';
+  }
+  catch(error) {throw error;}
+
+}
+
+export const getuserdata = async (userName: string[]) => {
+  try{
+
+    const user = await Prisma.userCredentials.findMany({
+      select: {
+        emailId: true,
+        name: true,
+        id:true
+      },
+      where: {
+        emailId: {
+          in: userName
+          }
+      },
+    });
+
+  
+    if (user) {
       return user;
      }
   

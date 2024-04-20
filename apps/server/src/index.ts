@@ -1,26 +1,27 @@
+//server imports
 import http from "http";
-import SocketService from "./socket";
+const PORT = process.env.PORT ? process.env.PORT : 8000;
+
+//express imports
 import express from "express";
 import cors from "cors";
-const HTTPPORT = process.env.HTTPPORT ? process.env.HTTPPORT : 3002;
-const PORT = process.env.PORT ? process.env.PORT : 8000;
 const app = express();
-import authRouter from "./routes/auth";
-import { Server } from "socket.io";
 import bodyParser = require("body-parser");
-import { Socket } from "socket.io";
-import { authMiddleware } from "./middleware/authMiddleware";
-
 const cookieParser = require("cookie-parser");
-const server = http.createServer(app);
+import authRouter from "./routes/auth";
+import userRouter from "./routes/userRoutes";
 
-// parse application/x-www-form-urlencoded
+//websocket imports
+import websocketconnection from "./Websocket";
+import searchRouter from "./routes/search";
+
+//server setup
+const server = http.createServer(app);
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
 app.use(cookieParser());
-
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -28,16 +29,12 @@ app.use(
   })
 );
 
-app.get("/testToken", authMiddleware, (req, res) => {
-  res.status(200).json({
-    message: "success",
-  });
-});
 app.use("/auth", authRouter);
-
-const socketService = new SocketService(server);
-// socketService.io.attach();
-socketService.initListner();
+app.use("/user", userRouter);
+app.use("/searchUser", searchRouter);
+// websocket connection
+const newConnection = new websocketconnection(server);
+newConnection.init();
 
 server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);

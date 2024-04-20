@@ -21,10 +21,11 @@ export class Encryption {
     }
   }
 
-  static async generateJwt(email: string, name: string) {
+  static async generateJwt(email: string, name: string,id:string) {
     const data = {
       email,
       name,
+      id
     };
 
     return await jwt.sign(data, process.env.JWT_SECRET_KEY);

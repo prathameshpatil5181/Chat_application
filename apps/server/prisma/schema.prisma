@@ -20,8 +20,11 @@ model userCredentials{
   emailId String @unique
   password String 
   name String
-  createdAt DateTime @default(now()) @map("created_at")
+  createdOn DateTime @default(now()) @map("created_at")
   lastUpdated DateTime @default(now()) @map("last_Updated")
+  status String @default("Hi there! i am using whatsapp")
+  profilePicture String @default("")
+  connections String[] @default([])
   @@map("userCredentials") 
 }
 
