@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../../Store/hooks";
 import { addUsers } from "../../Store/Userslices/UserMiddlerware";
 import { setSocket } from "../../Store/Slices/socketActions";
+import { SetAllGroups } from "../../Store/GroupSlice/GroupMiddlewares";
 export default function HomeLayout({
   children, // will be a page or nested layout
 }: {
@@ -13,9 +14,9 @@ export default function HomeLayout({
 
  
   useEffect(() => {
-    console.log('in layout');
     dispatch(addUsers());
     dispatch(setSocket());
+    dispatch(SetAllGroups());
     }),[];
 
   return (

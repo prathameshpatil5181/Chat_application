@@ -15,10 +15,9 @@ export default function RootLayout({
     <html lang="en">
       <Provider store={Store}>
         <body className="w-screen h-screen overflow-x-hidden relative">
-          {children}
+         {children}
         </body>
       </Provider>
-
     </html>
   );
 }

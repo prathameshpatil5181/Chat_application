@@ -16,9 +16,9 @@ const ModelSlice = createSlice({
       state.isVisible = !state.isVisible;
       state.component = action.payload;
     },
-    hideModel(state, action) {
+    hideModel(state) {
       state.isVisible = false;
-      state.component = action.payload;
+      state.component = null;
     },
   },
 });

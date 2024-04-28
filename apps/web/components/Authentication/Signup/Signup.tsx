@@ -79,7 +79,7 @@ const Signup: React.FC = () => {
         if (jsonResponse.result === true) {
           localStorage.setItem("auth", jsonResponse.status);
           route.push("/Home/all");
-          console.log(jsonResponse);
+
           return;
         }
         setIsSigningIn({

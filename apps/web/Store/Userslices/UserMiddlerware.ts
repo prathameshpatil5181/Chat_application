@@ -3,42 +3,50 @@ import { RootState } from "../Store";
 import { ThunkAction } from "redux-thunk";
 import { userConnectionActions } from "./UserConnection";
 import { SenderDetailActions } from "./SenderDetailsSlice";
-import { Console } from "console";
-export const addUsers =  (): ThunkAction<
+export const addUsers = (): ThunkAction<
   void,
   RootState,
   unknown,
   UnknownAction
 > => {
-    
-    return async (dispatch) => {
-        try {
-        const response = await fetch(
-          "http://localhost:8000/user/getConnection",
-          {
-            method: "GET",
-            credentials: "include",
-            // should be there
-          }
+  return async (dispatch) => {
+    try {
+      const response = await fetch("http://localhost:8000/user/getConnection", {
+        method: "GET",
+        credentials: "include",
+        // should be there
+      });
+
+      const jsonResponse = await response.json();
+      if (jsonResponse.connections.length !== 0) {
+        dispatch(
+          userConnectionActions.setAllUserConnetions(jsonResponse.connections)
         );
-
-        const jsonResponse = await response.json();
-        console.log(jsonResponse);
-        if (jsonResponse.connections.length !== 0) {
-            dispatch(userConnectionActions.setAllUserConnetions(jsonResponse.connections));
-        }
-      } catch (error) {
-        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
     }
-}
-}
 
-export const setReceiver = (user:string): ThunkAction<
-  void,
-  RootState,
-  unknown,
-  UnknownAction
-  > => {
+    try {
+      const response = await fetch("http://localhost:8000/user/getMessages", {
+        method: "POST",
+        credentials: "include",
+        // should be there
+      });
+
+      const jsonResponse = await response.json();
+      if (jsonResponse.result.length !== 0) {
+        dispatch(userConnectionActions.insertMessages(jsonResponse.result));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const setReceiver = (
+  user: string
+): ThunkAction<void, RootState, unknown, UnknownAction> => {
   return async (dispatch, getState) => {
     let userInfo = getState().userCon.users.find((x) => x.id === user);
     if (!userInfo) {
@@ -71,5 +79,5 @@ export const setReceiver = (user:string): ThunkAction<
       }
     }
     dispatch(SenderDetailActions.setUsernameState(userInfo));
-  }
+  };
 };

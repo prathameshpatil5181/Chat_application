@@ -4,12 +4,15 @@ import SocketSlice from "./Slices/SocketSlice";
 import SenderDetailsSlice from "./Userslices/SenderDetailsSlice";
 import UserConnectionSlice from "./Userslices/UserConnection";
 import { IuserConnectionState } from "./Userslices/UserConnection";
+import { IGpIstate } from "./GroupSlice/GroupSlice";
+import GroupSlice from "./GroupSlice/GroupSlice";
 const Store = configureStore({
   reducer: {
     model: ModelSlice.reducer,
     webSoc: SocketSlice.reducer,
     sender: SenderDetailsSlice.reducer,
     userCon: UserConnectionSlice.reducer,
+    group:GroupSlice.reducer
   },
 });
 

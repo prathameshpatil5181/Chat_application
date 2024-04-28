@@ -4,8 +4,8 @@ import profileimage from "../../public/profile.jpg";
 import Image from "next/image";
 import MenuThreeDots from "../../SVG/MenuThreeDots";
 import { useAppSelector } from "../../Store/hooks";
-const ChatNav: React.FC = () => {
-  const name = useAppSelector((state) => state.sender.name);
+const GroupNav: React.FC = () => {
+  const group = useAppSelector((state) => state.group.activeGroup);
   return (
     <div className="p-1 border-b-1 border-gray-400 bg-white h-full w-full">
       <nav className="grid grid-cols-[20%,75%,5%] items-center p-1">
@@ -17,7 +17,7 @@ const ChatNav: React.FC = () => {
           />
         </div>
         <div className="justify-self-start grow">
-          <h1>{name}</h1>
+          <h1>{group.name}</h1>
         </div>
         <div className="justify-self-end">
           <MenuThreeDots />
@@ -27,4 +27,4 @@ const ChatNav: React.FC = () => {
   );
 };
 
-export default ChatNav;
+export default GroupNav;

@@ -40,7 +40,6 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log("logging in");
     e.preventDefault();
     if (email.value.trim() && password.value.trim()) {
       setIsLogging((prevState) => !prevState);

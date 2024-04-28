@@ -26,7 +26,7 @@ const ProfilePhoto: React.FC = () => {
 
   return (
     <div className="h-full w-full relative">
-      <div className="rounded-[50%] border border-red-900 z-10 h-[200px] w-[200px]">
+      <div className="rounded-[50%] border z-10 h-[200px] w-[200px]">
         <Image
           src={imagePath}
           alt="profile"

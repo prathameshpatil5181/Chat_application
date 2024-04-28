@@ -23,7 +23,6 @@ const AddPeopleModel: React.FC = () => {
   const dispatch = useAppDispatch();
   const UserConnectionState = useAppSelector((state) => state.userCon.users);
   const getResult = async () => {
-    console.log("fetching values");
     const searchString = inputRef.current?.value;
     try {
       const response = await fetch("http://localhost:8000/searchUser/search", {
@@ -79,7 +78,7 @@ const AddPeopleModel: React.FC = () => {
       const requestJson = await requestResult.json();
       if (requestJson.success===true) {
         // dispatch(setReceiver(result.id));
-        dispatch(ModelActions.hideModel);
+        dispatch(ModelActions.hideModel());
         route.push(`/Home/${result.id}`);
       }
     } catch (error) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import React from "react";
 import InputComponent from "./InputComponent"; 
 import { useParams } from "next/navigation";
@@ -13,7 +13,7 @@ const ChatPage = () => {
   //@ts-ignore      
   const user = decodeURIComponent(id.name);
   const msg = useAppSelector(state => state.userCon.messages);
-
+  const chatRef = useRef<HTMLDivElement>(null);
 
 
 
@@ -24,6 +24,7 @@ const ChatPage = () => {
 
   const handlemsg = () => {
     setMessages(msg.filter(m => m.from === user));
+    chatRef.current?.scrollIntoView(false)
   } 
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const ChatPage = () => {
 
   return (
     <div className="w-full h-full grid grid-rows-[90%,10%] bg-slate-100 ">
-      <div className="w-full flex-1 py-3 px-3 flex flex-col gap-2 overflow-y-auto">
+      <div className="w-full flex-1 py-3 px-3 flex flex-col gap-2 overflow-y-auto" ref={chatRef}>
         {messages.map((message, index: number) => (
           <div
             key={index}

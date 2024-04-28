@@ -16,7 +16,7 @@ const FooterNavigation: React.FC = () => {
 
 
   const addPeopleHandler = () => {
-    dispatch(ModelActions.toogleModel('showing the model'));
+    dispatch(ModelActions.toogleModel('addPeople'));
 }
 
   const profileHandler = () => {

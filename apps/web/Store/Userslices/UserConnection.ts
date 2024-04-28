@@ -3,8 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 export interface IuserConnectionState {
   messages: {
     from: string;
+    to: string;
     message: string;
-    self:boolean
+    self: boolean;
+    sentTime: string; 
+    type:string
   }[];
   users: {
     emailId: string;
@@ -34,9 +37,16 @@ const UserConnectionSlice = createSlice({
       state.messages.push({
         from: action.payload.from,
         message: action.payload.message,
-        self:action.payload.self
+        to:action.payload.to,
+        self: action.payload.self,
+        sentTime: action.payload.sentTime,
+        type: action.payload.from,
       });
     },
+
+    insertMessages(state, action) {
+      state.messages = action.payload;
+    }
   },
 });
 

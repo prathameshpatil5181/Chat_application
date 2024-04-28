@@ -1,6 +1,7 @@
 'use client';
+
 import { motion } from "framer-motion";
-export default function ProfileLayout({
+export default function groupLayout({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;
@@ -9,16 +10,16 @@ export default function ProfileLayout({
     <motion.div
       className="no-scrollbar h-full w-full"
       initial={{
-        opacity: 0,
+        x: -900,
       }}
       animate={{
-        opacity: 1,
+        x: 0,
       }}
       exit={{
         opacity: 0,
       }}
       transition={{
-        delay: 0.5,
+        delay: 0.1,
       }}
     >
       {children}
