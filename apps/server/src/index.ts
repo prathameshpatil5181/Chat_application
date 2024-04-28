@@ -1,18 +1,41 @@
-import http from 'http';
-import SocketService from './socket';
+//server imports
+import http from "http";
+const PORT = process.env.PORT ? process.env.PORT : 8000;
 
-async function init(){
-    const httpServer = http.createServer();
-    const PORT = process.env.PORT?process.env.PORT:8000;
-    const socketService = new SocketService();
+//express imports
+import express from "express";
+import cors from "cors";
+const app = express();
+import bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+import authRouter from "./routes/auth";
+import userRouter from "./routes/userRoutes";
 
-    socketService.io.attach(httpServer);
+//websocket imports
+import websocketconnection from "./Websocket";
+import searchRouter from "./routes/search";
 
-    httpServer.listen(PORT,()=>{
-        console.log(`HTTP server running at port ${PORT}`);
-    })
+//server setup
+const server = http.createServer(app);
+app.use(bodyParser.urlencoded({ extended: false }));
 
-    socketService.initListner();
-}
+// parse application/json
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
-init();
+app.use("/auth", authRouter);
+app.use("/user", userRouter);
+app.use("/searchUser", searchRouter);
+// websocket connection
+const newConnection = new websocketconnection(server);
+newConnection.init();
+
+server.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}`);
+});

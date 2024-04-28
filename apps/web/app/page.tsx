@@ -1,32 +1,33 @@
+
 "use client";
-import {useState } from 'react'
-import { useSocket } from './context/SocketProvider';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 const page = () => {
-  const {sendMessage,messages} = useSocket();
-  const [message,setMessage] = useState('');
+ 
+  const router = useRouter();
 
-  const changeHandler= (e:React.ChangeEvent<HTMLInputElement>)=>{
-    setMessage(e.target.value);
-  }
+  const RedirectHandler = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/auth/validate", {
+        credentials:'include'
+      });
 
-  return (
-    <div>
-      <div>
-        This is chat Window
-      </div>
-      <div>
-        <input type='text' placeholder='Message...' onChange={changeHandler}/>
-        <button onClick={()=>sendMessage(message)}>Send</button>
-      </div>
-      <div>
-      {messages.map((e) => (
-        <ul>
-          <li key={e}>{e}</li>
-        </ul>
-        ))}
-      </div>
-    </div>
-  )
-}
+      if (response.status === 401) {
+        router.push("/login");
+        return;
+      }
+      router.push("/Home/all");
+    } catch (error) {
+      console.error(error);
+      throw Error;
+    }
+  };
 
-export default page
+  useEffect(() => {
+    RedirectHandler();
+  }, []);
+
+  return <div className="w-full h-full no-scrollbar"></div>;
+};
+
+export default page;

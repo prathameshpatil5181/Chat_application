@@ -1,0 +1,83 @@
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model testuser{
+  id String @id @default(uuid())
+  text String
+  createdAt DateTime @default(now()) @map("created_at")
+  @@map("testuser") 
+}
+
+model userCredentials{
+  id String @id @default(uuid()) @unique
+  emailId String @unique
+  password String 
+  name String
+  createdOn DateTime @default(now()) @map("created_at")
+  lastUpdated DateTime @default(now()) @map("last_Updated")
+  status String @default("Hi there! i am using whatsapp")
+  profilePicture String @default("")
+  connections String[] @default([])
+  @@map("userCredentials") 
+}
+
+model socketConnections{
+  userName String @unique
+  socketId String
+  createdAt DateTime @default(now())
+  autoClear DateTime @default(now())
+  connections String @default("")
+  groups String @default("")
+  status Boolean @default(false)
+  @@map("socketConnections") 
+}
+
+model Messages{
+   mid String @id @default(uuid())
+   message String
+   type String
+   sentTime DateTime @default(now())
+   from String 
+   to String 
+  @@map("Messages") 
+}
+
+model Group{
+  gid String @id @default(uuid()) @unique
+  name String
+  Members String[] @default([])
+  createdOn DateTime @default(now())
+  Admins String[] 
+  createdBy String
+  profilePicture String @default("")
+  @@map("Group") 
+}
+
+model groupChat{
+  gchatid String @id @default(uuid())
+   message String
+   type String
+   sentTime DateTime @default(now())
+   from String 
+   to String 
+  @@map("groupChat") 
+}
+
+
+model GrroupMessages{
+   gid String @id @default(uuid())
+   message String
+   type String
+   sentTime DateTime @default(now())
+   from String  
+   members String[] 
+  @@map("group_messages") 
+}
