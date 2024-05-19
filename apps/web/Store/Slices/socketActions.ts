@@ -5,6 +5,7 @@ import { Wsocket } from "./socketConnection";
 import { SocketActions } from "./SocketSlice";
 import { userConnectionActions } from "../Userslices/UserConnection";
 import { GroupActions } from "../GroupSlice/GroupSlice";
+import { Serverurl } from "../../Utils/UtilityFunctions";
 export const setSocket = (): ThunkAction<
   void,
   RootState,
@@ -35,14 +36,11 @@ export const setSocket = (): ThunkAction<
           if (!user) {
             // console.log("inside the user not availiable");
             try {
-              const response = await fetch(
-                "http://localhost:8000/user/getgroups",
-                {
-                  method: "GET",
-                  credentials: "include",
-                  // should be there
-                }
-              );
+              const response = await fetch(`${Serverurl}/user/getgroups`, {
+                method: "GET",
+                credentials: "include",
+                // should be there
+              });
 
               const jsonResponse = await response.json();
               // console.log(jsonResponse);
@@ -73,19 +71,16 @@ export const setSocket = (): ThunkAction<
         if (!user) {
           // console.log("inside the user not availiable");
           try {
-            const response = await fetch(
-              "http://localhost:8000/searchUser/searchone",
-              {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  search: jsonMsg.from,
-                }),
-              }
-            );
+            const response = await fetch(`${Serverurl}/searchUser/searchone`, {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                search: jsonMsg.from,
+              }),
+            });
 
             const jsonResponse = await response.json();
             dispatch(
@@ -93,6 +88,7 @@ export const setSocket = (): ThunkAction<
                 emailId: jsonResponse.result.emailId,
                 name: jsonResponse.result.name,
                 id: jsonResponse.result.id,
+                profilePicture: jsonResponse.result.profilePicture,
               })
             );
           } catch (error) {

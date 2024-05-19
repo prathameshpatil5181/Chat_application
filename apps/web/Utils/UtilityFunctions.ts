@@ -1,3 +1,5 @@
+export const Serverurl = "http://localhost:8000";
+
 export const debounce = <F extends (...args: any[]) => void>(
   func: F,
   delay: number
@@ -9,4 +11,18 @@ export const debounce = <F extends (...args: any[]) => void>(
       func(...args);
     }, delay);
   };
+};
+
+export const setUserDetail = async () => {
+  try {
+    const res = await fetch(`${Serverurl}/auth/validate`, {
+      credentials: "include",
+    });
+
+    const response = await res.json();
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw Error;
+  }
 };

@@ -4,8 +4,9 @@ import { LoginController } from "../Controllers/authControllers/LoginController"
 import { SignupController } from "../Controllers/authControllers/SignupController";
 import { authMiddleware } from "../middleware/authMiddleware";
 import { getConnections } from "../Controllers/UserContrllers/getConnection";
+import { validate } from "../Controllers/authControllers/ValidateController";
 authRouter.post("/login", LoginController);
 authRouter.post("/signup", SignupController);
 authRouter.get("/getConnections", authMiddleware, getConnections);
-authRouter.get("/validate", authMiddleware);
+authRouter.get("/validate", authMiddleware,validate);
 export default authRouter;

@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import { Serverurl } from "../../../Utils/UtilityFunctions";
 interface AuthInterface {
   value: string;
   isValid: boolean;
@@ -44,7 +45,7 @@ const Login: React.FC = () => {
     if (email.value.trim() && password.value.trim()) {
       setIsLogging((prevState) => !prevState);
       try {
-        const response = await fetch("http://localhost:8000/auth/login", {
+        const response = await fetch(`${Serverurl}/auth/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

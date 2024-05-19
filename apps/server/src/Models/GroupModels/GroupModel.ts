@@ -1,4 +1,4 @@
-import { error } from "console";
+
 import Prisma from "../Prisma";
 
 /*

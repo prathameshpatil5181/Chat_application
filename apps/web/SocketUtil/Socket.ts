@@ -1,3 +1,3 @@
 import { io } from "socket.io-client";
-
-export const SocketIo = io("http://localhost:8000");
+import { Serverurl } from "../Utils/UtilityFunctions";
+export const SocketIo = io(Serverurl);

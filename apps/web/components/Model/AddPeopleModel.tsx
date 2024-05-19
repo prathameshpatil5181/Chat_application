@@ -10,10 +10,12 @@ import { useAppDispatch } from "../../Store/hooks";
 import { setReceiver } from "../../Store/Userslices/UserMiddlerware";
 import { useAppSelector } from "../../Store/hooks";
 import { ModelActions } from "../../Store/UiSlices/ModelSlice";
+import { Serverurl } from "../../Utils/UtilityFunctions";
 interface Imodelchatcard {
   name: string;
   emailId: string;
   id: string;
+  profilePicture:string;
 }
 
 const AddPeopleModel: React.FC = () => {
@@ -25,7 +27,7 @@ const AddPeopleModel: React.FC = () => {
   const getResult = async () => {
     const searchString = inputRef.current?.value;
     try {
-      const response = await fetch("http://localhost:8000/searchUser/search", {
+      const response = await fetch(`${Serverurl}/searchUser/search`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -60,7 +62,7 @@ const AddPeopleModel: React.FC = () => {
     }
 
     try {
-      const requestResult = await fetch("http://localhost:8000/user/addUser", {
+      const requestResult = await fetch(`${Serverurl}/user/addUser`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -125,6 +127,7 @@ const AddPeopleModel: React.FC = () => {
                     name={result.name}
                     id={result.id}
                     email={result.emailId}
+                    profile={result.profilePicture}
                   />
                 </li>
               ))}

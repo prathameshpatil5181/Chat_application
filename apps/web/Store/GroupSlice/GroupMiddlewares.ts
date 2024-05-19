@@ -2,7 +2,7 @@ import { UnknownAction } from "redux";
 import { RootState } from "../Store";
 import { ThunkAction } from "redux-thunk";
 import { GroupActions } from "./GroupSlice";
-
+import { Serverurl } from "../../Utils/UtilityFunctions";
 export const SetAllGroups = (): ThunkAction<
   void,
   RootState,
@@ -11,7 +11,7 @@ export const SetAllGroups = (): ThunkAction<
 > => {
   return async (dispatch) => {
     try {
-      const response = await fetch("http://localhost:8000/user/getgroups", {
+      const response = await fetch(`${Serverurl}/user/getgroups`, {
         method: "GET",
         credentials: "include",
         // should be there
@@ -25,6 +25,8 @@ export const SetAllGroups = (): ThunkAction<
     } catch (error) {
       console.log(error);
     }
+
+
   };
 };
 
@@ -35,7 +37,7 @@ export const setGroup = (
     let gp = getState().group.groups.find((gp) => gp.gid === gid);
     if (!gp) {
       try {
-        const response = await fetch("http://localhost:8000/user/getgroups", {
+        const response = await fetch(`${Serverurl}/user/getgroups`, {
           method: "GET",
           credentials: "include",
           // should be there

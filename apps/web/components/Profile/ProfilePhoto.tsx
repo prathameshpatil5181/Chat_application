@@ -1,16 +1,32 @@
 "use client";
 
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CameraSvg from "../../SVG/CameraSvg";
-const ProfilePhoto: React.FC = () => {
-  const [imagePath, setImagePath] = useState<string>("/profile.jpg");
+import { useAppDispatch} from "../../Store/hooks";
+import { userDetailActions } from "../../Store/Userslices/userSlice";
+import LoadingSpinnerSvg from "../../SVG/LoadingSpinnerSvg"
+import { Serverurl } from "../../Utils/UtilityFunctions";
+interface IProfilePhoto {
+  photo: string;
+}
+
+const ProfilePhoto: React.FC<IProfilePhoto> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
+  const [imageLoading, setimagLoading] = useState<boolean>(false);
+  const [imagePath, setImagePath] = useState<string>(props.photo);
   const handleChangProfile = (): void => {
     inputRef.current?.click();
   };
 
+  useEffect(() => {
+    setImagePath(props.photo);
+  },[props.photo])
+
+
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setimagLoading(true);
     const files = e.target.files;
 
     if (files && files.length > 0) {
@@ -29,17 +45,16 @@ const ProfilePhoto: React.FC = () => {
 
         // alert(imageBase64Stringsep);
         // console.log(base64String);
-        console.log(reader.result);
         result = reader.result;
 
         try {
           const response = await fetch(
-            "http://localhost:8000/user/updateprofileimage",
+            `${Serverurl}/user/updateprofileimage`,
             {
               method: "POST",
               credentials: "include",
               headers: {
-                "Content-Type":"application/json"
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 image: result,
@@ -47,10 +62,16 @@ const ProfilePhoto: React.FC = () => {
             }
           );
           const jsonResponse = await response.json();
-          setImagePath(jsonResponse.result);
+          // setImagePath(jsonResponse.result); 
+          dispatch(
+            userDetailActions.updateField({
+              field: "profilePicture",
+              value: jsonResponse.result,
+            })
+          );
         } catch (error) {
           console.log(error);
-        }
+        } 
       };
       //@ts-ignore
       reader.readAsDataURL(file);
@@ -84,15 +105,18 @@ const ProfilePhoto: React.FC = () => {
 
   return (
     <div className="h-full w-full relative">
-      <div className="rounded-[50%] border z-10 h-[200px] w-[200px]">
-        <Image
-          src={imagePath}
+      <div className="rounded-[50%] border z-10 h-[200px] w-[200px] flex items-center justify-center">
+
+        {imagePath || imageLoading? <Image
+          src={props.photo}
           alt="profile"
           height={100}
           width={100}
           className="object-cover z-0 rounded-[50%] h-[200px] w-[200px]"
           priority={false}
-        />
+        />:<LoadingSpinnerSvg/>}
+
+       
       </div>
       <div
         className="bg-white w-fit rounded-[50%] p-2 absolute top-32 left-36 "

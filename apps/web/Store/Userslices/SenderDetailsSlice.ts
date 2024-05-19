@@ -4,6 +4,7 @@ const initialState = {
   emailId: "",
   name: "",
   id: "",
+  profilePicture:""
 };
 
 const SenderDetailsSlice = createSlice({
@@ -14,6 +15,7 @@ const SenderDetailsSlice = createSlice({
       state.emailId = action.payload.emailId;
       state.name = action.payload.name;
       state.id = action.payload.id;
+      state.profilePicture = action.payload.profilePicture;
     },
   },
 });

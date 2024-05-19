@@ -3,6 +3,7 @@ import { RootState } from "../Store";
 import { ThunkAction } from "redux-thunk";
 import { userConnectionActions } from "./UserConnection";
 import { SenderDetailActions } from "./SenderDetailsSlice";
+import { Serverurl } from "../../Utils/UtilityFunctions";
 export const addUsers = (): ThunkAction<
   void,
   RootState,
@@ -11,7 +12,7 @@ export const addUsers = (): ThunkAction<
 > => {
   return async (dispatch) => {
     try {
-      const response = await fetch("http://localhost:8000/user/getConnection", {
+      const response = await fetch(`${Serverurl}/user/getConnection`, {
         method: "GET",
         credentials: "include",
         // should be there
@@ -28,7 +29,7 @@ export const addUsers = (): ThunkAction<
     }
 
     try {
-      const response = await fetch("http://localhost:8000/user/getMessages", {
+      const response = await fetch(`${Serverurl}/user/getMessages`, {
         method: "POST",
         credentials: "include",
         // should be there
@@ -51,19 +52,16 @@ export const setReceiver = (
     let userInfo = getState().userCon.users.find((x) => x.id === user);
     if (!userInfo) {
       try {
-        const response = await fetch(
-          "http://localhost:8000/searchUser/searchone",
-          {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              search: user,
-            }),
-          }
-        );
+        const response = await fetch(`${Serverurl}/searchUser/searchone`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            search: user,
+          }),
+        });
 
         const jsonResponse = await response.json();
         userInfo = jsonResponse.result;
@@ -72,6 +70,7 @@ export const setReceiver = (
             emailId: jsonResponse.result.emailId,
             name: jsonResponse.result.name,
             id: jsonResponse.result.id,
+            profilePicture: jsonResponse.result.profilePicture,
           })
         );
       } catch (error) {

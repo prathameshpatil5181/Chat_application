@@ -6,6 +6,7 @@ interface Imodelchatcard {
   name: string;
   email: string;
   id: string;
+  profile: string;
 }
 
 const ModelChatCard: React.FC<Imodelchatcard> = (props) => {
@@ -13,7 +14,7 @@ const ModelChatCard: React.FC<Imodelchatcard> = (props) => {
     <div key={props.id} className="grid grid-cols-[20%,70%,10%] items-center">
       <div>
         <Image
-          src={profileimage}
+          src={props.profile?props.profile:profileimage}
           alt="profileImage"
           height={50}
           width={50}

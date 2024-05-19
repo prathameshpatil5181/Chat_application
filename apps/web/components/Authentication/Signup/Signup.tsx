@@ -1,5 +1,5 @@
 "use client";
-
+import { Serverurl } from "../../../Utils/UtilityFunctions";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -61,7 +61,7 @@ const Signup: React.FC = () => {
     if (name.value.trim() && email.value.trim() && password.value.trim()) {
       setIsLogging((prevState) => !prevState);
       try {
-        const response = await fetch("http://localhost:8000/auth/signup", {
+        const response = await fetch(`${Serverurl}/auth/signup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

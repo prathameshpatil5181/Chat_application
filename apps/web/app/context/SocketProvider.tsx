@@ -1,5 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useContext, useState } from "react";
+
+import { Serverurl } from "../../Utils/UtilityFunctions";
 import { io, Socket } from "socket.io-client";
 import { json } from "stream/consumers";
 interface SocketProviderProps {
@@ -42,7 +44,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const _socket = io("http://localhost:8000",{
+    const _socket = io(Serverurl,{
       withCredentials:true,
     });
     _socket.on("chat", onMessageRec);

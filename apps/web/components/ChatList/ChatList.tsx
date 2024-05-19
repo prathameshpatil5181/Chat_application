@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAppSelector } from "../../Store/hooks";
 import { useAppDispatch } from "../../Store/hooks";
 import { GroupActions } from "../../Store/GroupSlice/GroupSlice";
+import { setGroup } from "../../Store/GroupSlice/GroupMiddlewares";
 interface Iconnections {
   emailId: string;
   name: string;
@@ -22,11 +23,13 @@ const ChatList: React.FC = () => {
   const router = useRouter();
   const conns = useAppSelector((state) => state.userCon.users);
   const groups = useAppSelector(state => state.group.groups);
+  // const dispatch = useAppDispatch();
   const chatHandler = (user: Iconnections) => {
     router.push(`/Home/${user.id}`);
   };
 
-  const GroupchatHandler = (id:gphandler) => {;
+  const GroupchatHandler = (id: gphandler) => {
+    // dispatch(setGroup(id.gid));
     router.push(`/Home/group/${id.gid}`);
   };
 
@@ -40,6 +43,7 @@ const ChatList: React.FC = () => {
         {conns.map((x, index) => (
           <li key={index} onClick={() => chatHandler(x)}>
             <ChatCard
+              profimage={x.profilePicture}
               name={x.name}
               lastchat={`hii from ${x.name}`}
               lasttime="11:20"

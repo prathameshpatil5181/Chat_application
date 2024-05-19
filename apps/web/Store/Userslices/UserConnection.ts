@@ -6,13 +6,14 @@ export interface IuserConnectionState {
     to: string;
     message: string;
     self: boolean;
-    sentTime: string; 
-    type:string
+    sentTime: string;
+    type: string;
   }[];
   users: {
     emailId: string;
     id: string;
     name: string;
+    profilePicture: string;
   }[];
 }
 

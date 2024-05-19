@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
 import { useAppSelector } from "../../Store/hooks";
+import { Serverurl } from "../../Utils/UtilityFunctions";
 import profileimage from "../../public/profile.jpg";
 const CreateGroupModel: React.FC = () => {
   const users = useAppSelector((state) => state.userCon.users);
@@ -18,20 +19,17 @@ const CreateGroupModel: React.FC = () => {
         }
 
         try {
-          const requestResult = await fetch(
-            "http://localhost:8000/user/creategroup",
-            {
-              method: "POST",
-              credentials: "include",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                name: inputRef.current?.value,
-                members: members,
-              }),
-            }
-          );
+          const requestResult = await fetch(`${Serverurl}/user/creategroup`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: inputRef.current?.value,
+              members: members,
+            }),
+          });
 
           if (requestResult.status === 500) {
             throw new Error("group not created");
@@ -105,7 +103,7 @@ const CreateGroupModel: React.FC = () => {
                     >
                       <div>
                         <Image
-                          src={profileimage}
+                          src={result.profilePicture?result.profilePicture:profileimage}
                           alt="profileImage"
                           height={50}
                           width={50}

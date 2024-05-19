@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState ,useCallback} from "react";
+import { useEffect,useMemo,useRef, useState} from "react";
 import React from "react";
 import { useParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "../../Store/hooks";
 
 import InputGroupComponent from "./inputGroupComponent";
-import { setGroup } from "../../Store/GroupSlice/GroupMiddlewares";
+// import { setGroup } from "../../Store/GroupSlice/GroupMiddlewares";
 const GroupChatPage = () => {
   const [messages, setMessages] = useState<
     {
@@ -18,26 +18,33 @@ const GroupChatPage = () => {
       to: string;
     }[]
   >([]);
-  const group = useParams();
-  //@ts-ignore
-  const groupId = decodeURIComponent(group.groupid);
-  const dispatch = useAppDispatch();
+
   const msg = useAppSelector((state) => state.group.message);
   const active = useAppSelector((state) => state.group.activeGroup);
+  const user = useAppSelector((state) => state.user.id);
+  const users = useAppSelector((state)=>state.userCon.users)
   const chatRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    dispatch(setGroup(groupId));
-  }, []);
   const handlemsg = () => {
-    setMessages(msg.filter((m) => m.to === active.gid));
-    chatRef.current?.scrollIntoView(false);
+    console.log("handling msg");
+    if (active?.gid) {
+      let msgarr = msg.filter((m) => m.to === active.gid);
+      setMessages(msgarr);
+    }
+  };  
+  const scrollToBottom = () => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
   };
-
 
   useEffect(() => {
     handlemsg();
-  }, [msg]);
+  }, [msg,active]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <div className="w-full h-full grid grid-rows-[90%,10%] bg-slate-100 ">
@@ -49,7 +56,7 @@ const GroupChatPage = () => {
           <div
             key={index}
             className={`bg-white  px-2 py-1  text-black shadow ${
-              message.type === "true"
+              message.from === user
                 ? "self-end rounded-l-lg rounded-b-lg "
                 : "rounded-r-lg rounded-b-lg"
             }`}
@@ -57,7 +64,10 @@ const GroupChatPage = () => {
               maxWidth: "fit-content",
             }}
           >
-            {message.message}
+            { message.from !== user && <div className="text-sky-800">
+              {users.find((x) => x.id === message.from)?.name}
+            </div>}
+            <div>{message.message}</div>
           </div>
         ))}
       </div>

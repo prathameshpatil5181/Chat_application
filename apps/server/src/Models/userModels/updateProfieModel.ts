@@ -34,6 +34,13 @@ export const updateProfilePicture = async (url: string, userId: string) => {
 export const getUserDetails = async (userid: string) => {
   try {
     const result = await Prisma.userCredentials.findUnique({
+      select: {
+        id: true,
+        emailId: true,
+        name: true,
+        profilePicture: true,
+        status: true,
+      },
       where: {
         id: userid,
       },

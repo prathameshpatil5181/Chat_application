@@ -10,7 +10,7 @@ const Profile: React.FC = () => {
         </div>
         <div className="h-fit w-full">Profile</div>
       </div>
-      <div className="bg-blue-100 h-full w-full">
+      <div className="bg-gray-100 h-full w-full">
         <ProfileOptions />
       </div>
     </div>

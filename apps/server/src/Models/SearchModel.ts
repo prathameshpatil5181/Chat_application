@@ -13,6 +13,7 @@ export const SearchModel = async (SearchString: string): Promise<IResult[]> => {
             emailId: true,
             name: true,
             id: true,
+            profilePicture:true
           },
           where: {
             name: { contains: SearchString },
@@ -32,6 +33,7 @@ export const searchUserModel = async (SearchString: string) => {
         emailId: true,
         name: true,
         id: true,
+        profilePicture:true
       },
       where: {
         id:SearchString

@@ -95,7 +95,8 @@ export const getuserdata = async (userName: string[]) => {
       select: {
         emailId: true,
         name: true,
-        id:true
+        id: true,
+        profilePicture:true
       },
       where: {
         emailId: {
