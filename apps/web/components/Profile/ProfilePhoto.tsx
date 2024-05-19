@@ -10,17 +10,75 @@ const ProfilePhoto: React.FC = () => {
     inputRef.current?.click();
   };
 
-  const handleChangeImage = (e:React.ChangeEvent<HTMLInputElement>): void => {
-
+  const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
     if (files && files.length > 0) {
       const file = files[0];
 
-      if (file instanceof Blob) {
-        const url = URL.createObjectURL(file);
-        setImagePath(url);
-      }
+      const imageData = new FormData();
+
+      let reader = new FileReader();
+      console.log("next");
+      let result: string | ArrayBuffer | null;
+      reader.onload = async function () {
+        //  const  base64String = reader.result?.replace("data:", "")
+        //       .replace(/^.+,/, "");
+
+        //   const imageBase64Stringsep = base64String;
+
+        // alert(imageBase64Stringsep);
+        // console.log(base64String);
+        console.log(reader.result);
+        result = reader.result;
+
+        try {
+          const response = await fetch(
+            "http://localhost:8000/user/updateprofileimage",
+            {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type":"application/json"
+              },
+              body: JSON.stringify({
+                image: result,
+              }),
+            }
+          );
+          const jsonResponse = await response.json();
+          setImagePath(jsonResponse.result);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      //@ts-ignore
+      reader.readAsDataURL(file);
+
+      //@ts-ignore
+      imageData.append("image", file);
+      console.log(imageData);
+      // try {
+      //   const response = await fetch(
+      //     "http://localhost:8000/user/updateprofileimage",
+      //     {
+      //       method: "POST",
+      //       credentials: "include",
+      //       body: imageData,
+      //     }
+      //   );
+      //   const jsonResponse = await response.json();
+      //   console.log("image respose");
+      //   console.log(jsonResponse);
+      // } catch (error) {
+      //   console.log(error);
+      // }
+
+      // if (file instanceof Blob) {
+      //   const url = URL.createObjectURL(file);
+      //   console.log(url);
+      //   setImagePath(url);
+      // }
     }
   };
 

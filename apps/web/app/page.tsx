@@ -8,11 +8,13 @@ const page = () => {
 
   const RedirectHandler = async () => {
     try {
-      const response = await fetch("http://localhost:8000/auth/validate", {
+      const res = await fetch(`http://localhost:8000/auth/validate`, {
         credentials:'include'
       });
 
-      if (response.status === 401) {
+      const response = await res.json();
+      console.log(response);
+      if (response.success === false) {
         router.push("/login");
         return;
       }

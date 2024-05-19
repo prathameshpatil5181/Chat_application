@@ -6,15 +6,19 @@ import { groupController } from "../Controllers/GroupController/GroupContrller";
 import { InsertMessage } from "../Models/MessageModels/MessageModel";
 import { getMessagesController } from "../Controllers/UserContrllers/getMessages";
 import { getGroups } from "../Controllers/GroupController/GroupContrller";
-
-
+import { UpdateProfileImage } from "../Controllers/UserContrllers/EditUserProfile";
 const userRouter = Router();
 
 userRouter.get("/getConnection", authMiddleware, getConnections);
 userRouter.post("/addUser", authMiddleware, AddConnections);
 userRouter.post("/creategroup", authMiddleware, groupController);
-userRouter.get("/getGroups",authMiddleware,getGroups)
-userRouter.post("/getmessages",authMiddleware, getMessagesController);
+userRouter.get("/getGroups", authMiddleware, getGroups);
+userRouter.post("/getmessages", authMiddleware, getMessagesController);
+userRouter.post(
+  "/updateprofileimage",
+  authMiddleware,
+  UpdateProfileImage
+);
 userRouter.post("/addmessageTest", async (req, res) => {
   try {
     const user = req.body.user;
@@ -31,12 +35,7 @@ userRouter.post("/addmessageTest", async (req, res) => {
       });
       return;
     }
-    const result = await InsertMessage(
-        message,
-        "message",
-        user,
-        to
-    );
+    const result = await InsertMessage(message, "message", user, to);
 
     if (result.success == true) {
       res.status(200).json(result);

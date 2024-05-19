@@ -18,9 +18,11 @@ export const authMiddleware = (
   // Get the JWT token from the request cookie or header
   const token = req.cookies.token;
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized: No token provided" });
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized: Invalid token",
+    });
   }
-
   try {
     // Verify the JWT token and decode it
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -28,6 +30,9 @@ export const authMiddleware = (
     req.body.user = decodedToken;
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Unauthorized: Invalid token" });
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized: Invalid token",
+    });
   }
 };

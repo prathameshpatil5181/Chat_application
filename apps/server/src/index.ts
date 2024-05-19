@@ -17,11 +17,18 @@ import searchRouter from "./routes/search";
 
 //server setup
 const server = http.createServer(app);
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false, limit: "20mb" }));
+
 
 // parse application/json
-app.use(bodyParser.json());
-app.use(cookieParser());
+app.use(bodyParser.json({
+  limit:'20mb'
+}));
+app.use(
+  cookieParser({
+    extended: true,
+  })
+);
 app.use(
   cors({
     origin: "http://localhost:3000",
