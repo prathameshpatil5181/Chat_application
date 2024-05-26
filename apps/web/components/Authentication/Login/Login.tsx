@@ -133,7 +133,7 @@ const Login: React.FC = () => {
                   </div>
                 </div>
               </label>
-              <div className="flex flex-row justify-between">
+              <div className="flex flex-col justify-between sm:flex-row sm:border-red-900 sm:justify-between">
                 <div className="flex flex-row items-center gap-2">
                   <label htmlFor="remember" className="">
                     <input

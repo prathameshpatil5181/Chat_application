@@ -21,7 +21,12 @@ export const LoginController = async (req: Request, res: Response) => {
   }
   const expirationDate = new Date();
   expirationDate.setDate(expirationDate.getDate() + 2);
-  res.cookie("token", token, { httpOnly: true, expires: expirationDate });
+  res.cookie("token", token, {
+    httpOnly: true,
+    expires: expirationDate,
+    sameSite: "none",
+    secure: true,
+  });
   res.status(200).json({
     message: "User logged in successfully",
     success: true,

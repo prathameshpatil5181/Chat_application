@@ -15,10 +15,11 @@ export const SignupController = async (req: Request, res: Response) => {
     }
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 2);
-    res
-      .cookie("token", userData.status, {
+    res.cookie("token", userData.status, {
         httpOnly: true,
         expires: expirationDate,
+        sameSite: "none",
+        secure: true,
       })
       .status(200)
       .json({

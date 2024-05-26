@@ -27,7 +27,7 @@ const AddPeopleModel: React.FC = () => {
   const getResult = async () => {
     const searchString = inputRef.current?.value;
     try {
-      const response = await fetch(`${Serverurl}/searchUser/search`, {
+      const response = await fetch(`${Serverurl}  `, {
         method: "POST",
         credentials: "include",
         headers: {

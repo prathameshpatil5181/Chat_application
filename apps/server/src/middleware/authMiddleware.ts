@@ -16,6 +16,7 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   // Get the JWT token from the request cookie or header
+  // console.log(process.env.JWT_SECRET_KEY);
   const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({

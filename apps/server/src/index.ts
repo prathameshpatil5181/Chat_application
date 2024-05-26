@@ -3,7 +3,7 @@ import http from "http";
 const PORT = process.env.PORT ? process.env.PORT : 8000;
 
 //express imports
-import express from "express";
+import express, { Request,Response,NextFunction } from "express";
 import cors from "cors";
 const app = express();
 import bodyParser = require("body-parser");
@@ -31,15 +31,21 @@ app.use(
 );
 app.use(
   cors({
-    origin: ["http://localhost:3000","http://192.168.0.105"],
+    origin: ["http://localhost:3000"],
     credentials: true,
   })
 );
  
-
-app.use("/auth", authRouter);
+const gotrequest = (req:Request, res:Response, next:NextFunction) => {
+  console.log(`request from ${req.socket.remoteAddress}`);
+  next();
+}
+app.use("/auth",gotrequest ,authRouter);
 app.use("/user", userRouter);
 app.use("/searchUser", searchRouter);
+app.get("/hello", (req, res) => {
+  res.status(200).send(`<h1>hello from server to ${req.socket.remoteAddress}</h1>`)
+});
 // websocket connection
 const newConnection = new websocketconnection(server);
 newConnection.init();

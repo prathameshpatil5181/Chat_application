@@ -9,7 +9,7 @@ const page = () => {
   const dispatch = useAppDispatch();
   const RedirectHandler = async () => {
     const response = await setUserDetail();
-      if (response.success === false) {
+      if (response.success === false && response.status!==200) {
         router.push("/login");
         return;
       }

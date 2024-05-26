@@ -12,7 +12,7 @@ export const SearchController = async (req: Request, res: Response) => {
 
 export const searchUserController = async (req: Request, res: Response) => {
   const searchString: string = req.body.search;
-
+  
   const Result = await searchUserModel(searchString);
   res.status(200).json({
     result: Result,

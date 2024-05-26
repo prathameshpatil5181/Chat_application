@@ -1,2 +1,2 @@
-
-export const Wsocket = new WebSocket("ws://localhost:8000");
+import { wsurl } from "../../Utils/UtilityFunctions";
+export const Wsocket = new WebSocket(wsurl);
