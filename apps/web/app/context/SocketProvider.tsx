@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useContext, useState } from "react";
 
 import { Serverurl } from "../../Utils/UtilityFunctions";
 import { io, Socket } from "socket.io-client";
-import { json } from "stream/consumers";
 interface SocketProviderProps {
   children?: React.ReactNode;
 }

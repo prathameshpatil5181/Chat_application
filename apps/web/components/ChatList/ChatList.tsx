@@ -2,9 +2,6 @@
 import ChatCard from "../ChatCard/ChatCard";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "../../Store/hooks";
-import { useAppDispatch } from "../../Store/hooks";
-import { GroupActions } from "../../Store/GroupSlice/GroupSlice";
-import { setGroup } from "../../Store/GroupSlice/GroupMiddlewares";
 interface Iconnections {
   emailId: string;
   name: string;
