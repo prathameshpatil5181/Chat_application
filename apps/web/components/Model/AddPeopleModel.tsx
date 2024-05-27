@@ -15,7 +15,7 @@ interface Imodelchatcard {
   name: string;
   emailId: string;
   id: string;
-  profilePicture:string;
+  profilePicture: string;
 }
 
 const AddPeopleModel: React.FC = () => {
@@ -27,7 +27,7 @@ const AddPeopleModel: React.FC = () => {
   const getResult = async () => {
     const searchString = inputRef.current?.value;
     try {
-      const response = await fetch(`${Serverurl}  `, {
+      const response = await fetch(`${Serverurl}/searchUser//search`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -78,7 +78,7 @@ const AddPeopleModel: React.FC = () => {
       }
 
       const requestJson = await requestResult.json();
-      if (requestJson.success===true) {
+      if (requestJson.success === true) {
         // dispatch(setReceiver(result.id));
         dispatch(ModelActions.hideModel());
         route.push(`/Home/${result.id}`);
