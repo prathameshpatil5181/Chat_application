@@ -40,6 +40,9 @@ const gotrequest = (req:Request, res:Response, next:NextFunction) => {
   console.log(`request from ${req.socket.remoteAddress}`);
   next();
 }
+app.get("/", (req:Request, res:Response) => {
+  res.send("healthy");
+})
 app.use("/auth",gotrequest ,authRouter);
 app.use("/user", userRouter);
 app.use("/searchUser", searchRouter);
