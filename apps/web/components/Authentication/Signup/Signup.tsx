@@ -99,7 +99,7 @@ const Signup: React.FC = () => {
   return (
     <div className="">
       <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl ">
-        <h1 className="text-4xl font-medium">Samwad</h1>
+        <h1 className="text-4xl font-medium">Sawad</h1>
         <p className="text-slate-500">Hi, Welcome 👋</p>
 
         <div className="my-5">

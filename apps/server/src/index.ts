@@ -29,13 +29,34 @@ app.use(
     extended: true,
   })
 );
+
+
+const allowedOrigins = [
+  "https://chat-application-3ew6hxl93-prathameshpatil5181s-projects.vercel.app", // Your frontend on Vercel
+  "https://chat.prathamesh-de.me", // Your backend
+  "http://localhost:3000"
+  // Add other trusted origins if needed
+];
+
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      // Check if the origin is in the allowed origins array
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   })
 );
- 
+
+
+
 const gotrequest = (req:Request, res:Response, next:NextFunction) => {
   console.log(`request from ${req.socket.remoteAddress}`);
   next();

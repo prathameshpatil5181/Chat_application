@@ -26,8 +26,8 @@ const AddPeopleModel: React.FC = () => {
   const UserConnectionState = useAppSelector((state) => state.userCon.users);
   const getResult = async () => {
     const searchString = inputRef.current?.value;
-    try {
-      const response = await fetch(`${Serverurl}/searchUser//search`, {
+    try { 
+      const response = await fetch(`${Serverurl}/searchUser/search`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -37,7 +37,7 @@ const AddPeopleModel: React.FC = () => {
           search: searchString,
         }),
       });
-      if (!response.ok) {
+      if (response.status!==200) {
         throw new Error("Failed to fetch data");
       }
 

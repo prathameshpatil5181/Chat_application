@@ -6,19 +6,38 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Serverurl } from "../../../Utils/UtilityFunctions";
+import {
+  setlocalStorage,
+  getlocalStorage,
+} from "../../../Utils/UtilityFunctions";
+
 interface AuthInterface {
   value: string;
   isValid: boolean;
 }
 
 const Login: React.FC = () => {
+  function savedEmail(): string {
+    const keyval = getlocalStorage("chat-x-email");
+    if (keyval !== null) {
+      return keyval;
+    } else {
+      return "";
+    }
+  }
+
   const [email, setEmail] = useState<AuthInterface>({
-    value: "",
+    value: savedEmail(),
     isValid: false,
   });
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLogging, setIsLogging] = useState<boolean>(false);
+  const [checked, setIsChecked] = useState<boolean>(false);
+  const [loginResult, setLoginResult] = useState<String | null | undefined>(
+    undefined
+  );
+
   const [password, setPassword] = useState<AuthInterface>({
     value: "",
     isValid: false,
@@ -40,10 +59,15 @@ const Login: React.FC = () => {
     }));
   };
 
+  const handleChange = () => {
+    setIsChecked((prevState) => !prevState);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (email.value.trim() && password.value.trim()) {
       setIsLogging((prevState) => !prevState);
+
       try {
         const response = await fetch(`${Serverurl}/auth/login`, {
           method: "POST",
@@ -57,20 +81,33 @@ const Login: React.FC = () => {
           }),
           // should be there
         });
+
+        if (response.status !== 200) {
+          console.log(response.statusText);
+          setIsLoggedIn(true);
+          setLoginResult(`Issue logging in due to ${response.status}`);
+          throw new Error(`Issue loging in due to ${response.status}`);
+        }
+
         const jsonResponse = await response.json();
 
         if (jsonResponse.message === "User logged in successfully") {
+          if (checked) {
+            setlocalStorage("chat-x-email", email.value);
+          }
+
           router.push("/Home/all");
           return;
         }
         setIsLoggedIn(true);
-        setIsLogging((prevState) => !prevState);
+        setLoginResult("Invalid EmailId or Password");
+        console.log(jsonResponse);
       } catch (error) {
+        setIsLogging((prevState) => !prevState);
         console.log(error);
-        throw error;
       }
     } else {
-      // Either email or password is empty
+      setLoginResult(null);
       console.error("Please enter both email and password");
     }
   };
@@ -95,7 +132,7 @@ const Login: React.FC = () => {
             </button>
           </div>
           <motion.div className="text-red-600">
-            {isLoggedIn && "Invalid email or Password"}
+            {isLoggedIn && loginResult}
           </motion.div>
           <form action="" className="my-10" onSubmit={handleSubmit}>
             <div className="flex flex-col space-y-5">
@@ -107,13 +144,15 @@ const Login: React.FC = () => {
                   type="text"
                   value={email.value}
                   onChange={handleEmail}
-                  className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
+                  className={`w-full py-3 border ${loginResult === null ? "border-red-600 shadow-red-600 shadow-sm" : "border-slate-200"} rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow`}
                   placeholder="Enter email address"
                 />
               </label>
               <label htmlFor="password">
                 <p className="font-medium text-slate-700 pb-2">Password</p>
-                <div className="w-full grid grid-cols-[80%,20%] border border-slate-200 rounded-lg pl-3 focus:border-slate-500 hover:shadow items-center ">
+                <div
+                  className={`w-full grid grid-cols-[80%,20%] border ${loginResult === null ? "border-red-600 shadow-red-600 shadow-sm" : "border-slate-200"} rounded-lg pl-3 focus:border-slate-500 hover:shadow items-center `}
+                >
                   <input
                     id="password"
                     name="password"
@@ -133,15 +172,15 @@ const Login: React.FC = () => {
                   </div>
                 </div>
               </label>
-              <div className="flex flex-col justify-between sm:flex-row sm:border-red-900 sm:justify-between">
-                <div className="flex flex-row items-center gap-2">
-                  <label htmlFor="remember" className="">
-                    <input
-                      type="checkbox"
-                      id="remember"
-                      className="w-4 h-4 border-slate-200 focus:bg-indigo-600"
-                    />
-                  </label>
+              <div className="flex flex-row justify-between sm:border-red-900 sm:justify-between">
+                <div className="flex flex-row items-center justify-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    className="w-4 h-4 border-slate-200 focus:bg-indigo-600"
+                    checked={checked}
+                    onChange={handleChange}
+                  />
                   <div>Remember me</div>
                 </div>
                 <div>

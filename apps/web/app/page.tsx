@@ -7,8 +7,12 @@ import { setUserDetail } from "../Utils/UtilityFunctions";
 const page = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+
+
+
   const RedirectHandler = async () => {
     const response = await setUserDetail();
+    console.log(response);
       if (response.success === false && response.status!==200) {
         router.push("/login");
         return;

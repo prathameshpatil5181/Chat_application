@@ -23,7 +23,7 @@ model userCredentials{
   name String
   createdOn DateTime @default(now()) @map("created_at")
   lastUpdated DateTime @default(now()) @map("last_Updated")
-  status String @default("Hi there! i am using whatsapp")
+  status String @default("Hi there! i am using ChitChat")
   profilePicture String @default("")
   connections String[] @default([])
   @@map("userCredentials") 
