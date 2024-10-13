@@ -6,6 +6,9 @@ export const AddConnections = async (req: Request, res: Response) => {
   console.log(userId);
   const result = await addUser(userId.email, req.body.addUser);
 
+
+  
+
   if (result === true) {
     res.status(200).json({
       success: true,

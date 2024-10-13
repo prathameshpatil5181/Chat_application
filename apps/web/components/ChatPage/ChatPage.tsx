@@ -3,27 +3,20 @@
 import { useEffect, useRef, useState } from "react";
 import React from "react";
 import InputComponent from "./InputComponent";
-import { useParams } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "../../Store/hooks";
-import { setReceiver } from "../../Store/Userslices/UserMiddlerware";
-const ChatPage = () => {
+import { useAppSelector } from "../../Store/hooks";
+const ChatPage :React.FC<{user:string}>= (props) => {
   const [messages, setMessages] = useState<
     { from: string; message: string; self: boolean }[]
   >([]);
-  const id = useParams();
-  const dispatch = useAppDispatch();
+
   //@ts-ignore
-  const user = decodeURIComponent(id.name);
   const msg = useAppSelector((state) => state.userCon.messages);
   const chatRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    dispatch(setReceiver(user));
-  }, []);
 
   const handlemsg = () => {
     console.log("handling msg");
-    setMessages(msg.filter((m) => m.from === user));
+    setMessages(msg.filter((m) => m.from === props.user));
     chatRef.current?.scrollIntoView(false);
   };
 

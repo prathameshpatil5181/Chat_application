@@ -12,20 +12,21 @@ const LoadingSpinnerSvg = () => {
           fy=".3125"
           gradientTransform="scale(1.5)"
         >
-          <stop offset="0" stop-color="#000000"></stop>
-          <stop offset=".3" stop-color="#000000" stop-opacity=".9"></stop>
-          <stop offset=".6" stop-color="#000000" stop-opacity=".6"></stop>
-          <stop offset=".8" stop-color="#000000" stop-opacity=".3"></stop>
-          <stop offset="1" stop-color="#000000" stop-opacity="0"></stop>
+          <stop offset="0" stopColor="#000000"></stop>
+          <stop offset=".3" stopColor="#000000" stopOpacity=".9"></stop>
+          <stop offset=".6" stopColor="#000000" stopOpacity=".6"></stop>
+          <stop offset=".8" stopColor="#000000" stopOpacity=".3"></stop>
+          <stop offset="1" stopColor="#000000" stopOpacity="0"></stop>
         </radialGradient>
         <circle
-          transform-origin="center"
+          //@ts-ignore
+          transformOrigin="center"
           fill="none"
           stroke="url(#a4)"
           strokeWidth="15"
           strokeLinecap="round"
-          stroke-dasharray="200 1000"
-          stroke-dashoffset="0"
+          strokeDasharray="200 1000"
+          strokeDashoffset="0"
           cx="100"
           cy="100"
           r="70"
@@ -42,7 +43,8 @@ const LoadingSpinnerSvg = () => {
           ></animateTransform>
         </circle>
         <circle
-          transform-origin="center"
+          //@ts-ignore
+          transformOrigin="center"
           fill="none"
           opacity=".2"
           stroke="#000000"

@@ -1,42 +1,45 @@
 import Prisma from "./Prisma";
 
 export interface IResult {
-    emailId: string,
-    name: string,
-    id:string
+  emailId: string;
+  name: string;
+  id: string;
 }
 
-export const SearchModel = async (SearchString: string): Promise<IResult[]> => {
-    try {
-        const Result: IResult[] = await Prisma.userCredentials.findMany({
-          select: {
-            emailId: true,
-            name: true,
-            id: true,
-            profilePicture:true
-          },
-          where: {
-            name: { contains: SearchString },
-          },
-        });
-        return Result;
-    }
-    catch (error) {
-        throw Error
-    }
-  
-};
-export const searchUserModel = async (SearchString: string) => {
+export const SearchModel = async (SearchString: string): Promise<IResult[]|string> => {
   try {
-    const Result: IResult |null = await Prisma.userCredentials.findUnique({
+    const Result: IResult[] | null = await Prisma.userCredentials.findMany({
+      take:50,
       select: {
         emailId: true,
         name: true,
         id: true,
-        profilePicture:true
+        profilePicture: true,
       },
       where: {
-        id:SearchString
+        name: {
+          contains: SearchString,
+          mode: "insensitive",
+        },
+      },
+    });
+    return Result;
+  } catch (error) {
+    console.log(error);
+    return "Error";
+  }
+};
+export const searchUserModel = async (SearchString: string) => {
+  try {
+    const Result: IResult | null = await Prisma.userCredentials.findUnique({
+      select: {
+        emailId: true,
+        name: true,
+        id: true,
+        profilePicture: true,
+      },
+      where: {
+        id: SearchString,
       },
     });
     return Result;
@@ -45,31 +48,26 @@ export const searchUserModel = async (SearchString: string) => {
   }
 };
 
-export const addUser = async(user:string,addUser:string):Promise<boolean> => {
-  
+export const addUser = async (
+  user: string,
+  addUser: string
+): Promise<boolean> => {
   try {
-
-   const result  = await Prisma.userCredentials.update({
+    const result = await Prisma.userCredentials.update({
       where: {
-        emailId:user
+        emailId: user,
       },
-     data: {
-       connections: {
-         push: addUser
-        }
-      }
-    }
-     
-   )
-    
+      data: {
+        connections: {
+          push: addUser,
+        },
+      },
+    });
+
     console.log(result);
     return true;
-    
-  }
-  catch (error) {
-    console.log('error in adding user');
+  } catch (error) {
+    console.log("error in adding user");
     return false;
   }
-
-
-}
+};

@@ -11,6 +11,7 @@ import { setReceiver } from "../../Store/Userslices/UserMiddlerware";
 import { useAppSelector } from "../../Store/hooks";
 import { ModelActions } from "../../Store/UiSlices/ModelSlice";
 import { Serverurl } from "../../Utils/UtilityFunctions";
+import LoadingSpinnerSvg from "../../SVG/LoadingSpinnerSvg";
 interface Imodelchatcard {
   name: string;
   emailId: string;
@@ -21,12 +22,19 @@ interface Imodelchatcard {
 const AddPeopleModel: React.FC = () => {
   const [users, setusers] = useState<[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [searched, setIsSearched] = useState<boolean>(false);
+
   const route = useRouter();
   const dispatch = useAppDispatch();
   const UserConnectionState = useAppSelector((state) => state.userCon.users);
   const getResult = async () => {
+    setIsLoading(true);
+    setIsSearched(true);
+
     const searchString = inputRef.current?.value;
-    try { 
+    try {
       const response = await fetch(`${Serverurl}/searchUser/search`, {
         method: "POST",
         credentials: "include",
@@ -37,17 +45,22 @@ const AddPeopleModel: React.FC = () => {
           search: searchString,
         }),
       });
-      if (response.status!==200) {
+      if (response.status !== 200) {
         throw new Error("Failed to fetch data");
       }
 
-      const jsonResponse = await response.json();
-      //@ts-ignore
-      setusers(jsonResponse.result);
+      const jsonResponse = await response.json(); 
+
+      if (jsonResponse.result !== false && jsonResponse.result !== "empty") {
+        setusers(jsonResponse.result);
+      } else {
+        setusers([]);
+      }
     } catch (error) {
       console.log(error);
-      throw Error;
     }
+
+    setIsLoading(false);
   };
 
   const onChangeHandler = debounce(getResult, 2000);
@@ -114,25 +127,32 @@ const AddPeopleModel: React.FC = () => {
         />
       </div>
       <div className="bg-white rounded-xl flex flex-col p-3 gap-3">
-        <div>Results</div>
-        <motion.div
-          className="flex flex-col gap-5"
-          transition={{ staggerChildren: 0.1 }}
-        >
-          <ul>
-            {users.length > 0 &&
-              users.map((result: Imodelchatcard) => (
-                <li key={result.id} onClick={() => addUserHandler(result)}>
-                  <ModelChatCard
-                    name={result.name}
-                    id={result.id}
-                    email={result.emailId}
-                    profile={result.profilePicture}
-                  />
-                </li>
-              ))}
-          </ul>
-        </motion.div>
+        {isLoading ? (
+          <div className="flex justify-center">
+            <LoadingSpinnerSvg />
+          </div>
+        ) : searched && users.length === 0 ? (
+          <div className="w-full text-center">No Results</div>
+        ) : (
+          <motion.div
+            className="flex flex-col gap-5"
+            transition={{ staggerChildren: 0.1 }}
+          >
+            <ul>
+              {users.length > 0 &&
+                users.map((result: Imodelchatcard) => (
+                  <li key={result.id} onClick={() => addUserHandler(result)}>
+                    <ModelChatCard
+                      name={result.name}
+                      id={result.id}
+                      email={result.emailId}
+                      profile={result.profilePicture}
+                    />
+                  </li>
+                ))}
+            </ul>
+          </motion.div>
+        )}
       </div>
     </motion.div>
   );

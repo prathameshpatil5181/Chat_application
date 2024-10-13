@@ -4,6 +4,7 @@ export default function LoginLayout({
 }: {
   children: React.ReactNode;
 }) {
+  
   return (
       <div className="no-scrollbar h-full w-full">{children}</div>
 
