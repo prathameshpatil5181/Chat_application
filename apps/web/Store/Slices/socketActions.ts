@@ -19,17 +19,18 @@ export const setSocket = (): ThunkAction<
       const ws = Wsocket;
       dispatch(SocketActions.setSocketConnection(true));
       ws.onopen = () => {
-        // console.log("WebSocket connected successfully!");
+         console.log("WebSocket connected successfully!");
       };
 
       ws.onmessage = async (event) => {
         const message = await event.data;
         const jsonMsg = JSON.parse(message);
-
+        console.log("socket message");
+        console.log(jsonMsg);
         if (jsonMsg.group) {
           //dispatch groupmsg
           // console.log('groupMsg');
-          // console.log(jsonMsg);
+          // console.log(jsonMsg);  
           const user = getState().group.groups.find(
             (user) => user.gid === jsonMsg.to
           );
@@ -66,7 +67,7 @@ export const setSocket = (): ThunkAction<
         }
 
         const user = getState().userCon.users.find(
-          (user) => user.id === jsonMsg.from
+          (user) => user.emailId === jsonMsg.from
         );
         if (!user) {
           // console.log("inside the user not availiable");

@@ -32,7 +32,9 @@ class websocketconnection {
     const ws = this._ws;
     ws.on("connection", (websocket, req) => {
       const newCon = new Connection(websocket, req);
-      connections.set(newCon.id, newCon);
+      //storing with the help of email
+      connections.set(newCon.email, newCon);
+
       websocketconnection.totalConnnections++;
       console.log(`New Connection id: ${newCon.Id} email: ${newCon.email}`);
       console.log(`total Connections ${websocketconnection.totalConnnections}`);
@@ -64,8 +66,8 @@ class websocketconnection {
   ChatMessageHandler = (messages: string) => {
     const message = JSON.parse(messages);
     const client: Connection | undefined = connections.get(message.to);
-    if (!client) {
-      console.log("stored in db");
+    
+    if (!client) { 
       return;
     }
     let send = {
@@ -76,6 +78,7 @@ class websocketconnection {
       type: message.type,
       sentTime: message.sentTime,
     };
+   
     client?.con.send(JSON.stringify(send));
   };
 

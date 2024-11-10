@@ -1,10 +1,10 @@
 // export const Serverurl = "https://13.232.195.84:8000";
-// export const Serverurl = "http://localhost:8000";
-// export const wsurl = "ws://localhost:8000";
+export const Serverurl = "http://localhost:8000";
+export const wsurl = "ws://localhost:8000";
 
 // export const wsurl = "wss://13.232.195.84:8000"; // import { redirect } from "next/navigation";
-export const wsurl = "wss://chat.prathamesh-de.me";
-export const Serverurl = "https://chat.prathamesh-de.me";
+// export const wsurl = "wss://chat.prathamesh-de.me";
+// export const Serverurl = "https://chat.prathamesh-de.me";
 export const debounce = <F extends (...args: any[]) => void>(
   func: F,
   delay: number

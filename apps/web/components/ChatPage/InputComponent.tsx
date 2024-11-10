@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../Store/hooks";
 const InputComponent: React.FC = () => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const dispatch = useAppDispatch();
-  const to = useAppSelector((state) => state.sender.id);
+  const to = useAppSelector((state) => state.sender.emailId);
 
   useEffect(() => {
     return () => {};

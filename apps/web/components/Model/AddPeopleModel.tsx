@@ -7,10 +7,11 @@ import { motion } from "framer-motion";
 import { debounce } from "../../Utils/UtilityFunctions";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "../../Store/hooks";
-import { setReceiver } from "../../Store/Userslices/UserMiddlerware";
+
 import { useAppSelector } from "../../Store/hooks";
 import { ModelActions } from "../../Store/UiSlices/ModelSlice";
 import { Serverurl } from "../../Utils/UtilityFunctions";
+import { setReceiver } from "../../Store/Userslices/UserMiddlerware";
 import LoadingSpinnerSvg from "../../SVG/LoadingSpinnerSvg";
 interface Imodelchatcard {
   name: string;
@@ -69,36 +70,39 @@ const AddPeopleModel: React.FC = () => {
     const user = UserConnectionState.find((x) => x.emailId === result.emailId);
 
     if (user) {
-      dispatch(setReceiver(result.id));
-      route.push(`/Home/${result.id}`);
+      dispatch(setReceiver(result.emailId));
+      route.push(`/Home/${result.emailId}`);
       return;
     }
 
-    try {
-      const requestResult = await fetch(`${Serverurl}/user/addUser`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          addUser: result.emailId,
-        }),
-      });
+    // try {
+    //   const requestResult = await fetch(`${Serverurl}/user/addUser`, {
+    //     method: "POST",
+    //     credentials: "include",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       addUser: result.emailId,
+    //     }),
+    //   });
 
-      if (requestResult.status === 500) {
-        throw new Error("User not added");
-      }
+    //   const requestJson = await requestResult.json();
+    //   if (requestJson.success !== false) {
+    //     throw new Error("User not added");
+    //   }
 
-      const requestJson = await requestResult.json();
-      if (requestJson.success === true) {
-        // dispatch(setReceiver(result.id));
-        dispatch(ModelActions.hideModel());
-        route.push(`/Home/${result.id}`);
-      }
-    } catch (error) {
-      console.log("error");
-    }
+    //   if (requestJson.success) {
+    //     // dispatch(setReceiver(result.id));
+    //     dispatch(ModelActions.hideModel());
+    //     route.push(`/Home/${result.id}`);
+    //   }
+    // } catch (error) {
+    //   console.log("error");
+    // }
+    dispatch(ModelActions.hideModel());
+    dispatch(setReceiver(result.emailId));
+    route.push(`/Home/${result.emailId}`);
   };
 
   return (

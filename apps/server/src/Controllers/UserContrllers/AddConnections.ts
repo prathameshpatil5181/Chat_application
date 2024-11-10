@@ -6,12 +6,11 @@ export const AddConnections = async (req: Request, res: Response) => {
   console.log(userId);
   const result = await addUser(userId.email, req.body.addUser);
 
+  console.log(userId);
 
-  
-
-  if (result === true) {
+  if (result) {
     res.status(200).json({
-      success: true,
+      success: result,
     });
   } else {
     res.status(500).json({
