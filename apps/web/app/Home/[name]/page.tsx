@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 const Chatpage = () => {
   const id = useParams();
   const dispatch = useAppDispatch();
-  const navigation = useRouter();
   //@ts-ignore
   const user: string = decodeURIComponent(id.name);
   const currentReceiver = useAppSelector((state) => state.sender);

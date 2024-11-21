@@ -16,17 +16,19 @@ export const setSocket = (): ThunkAction<
   return (dispatch, getState) => {
     const state = getState();
 
-
     if (!state.webSoc.isConnected) {
       const ws = Wsocket;
-      dispatch(SocketActions.setSocketConnection(true));
+      ws.onopen = () => {
+        dispatch(SocketActions.setSocketConnection(true));
 
-      const msg = {
-        channel: "REQUEST",
-        type: "REQUESTUPDATE",
-        from: "",
+        const msg = {
+          channel: "REQUEST",
+          type: "REQUESTUPDATE",
+          from: "",
+        };
+        ConnectionRequestHandler.getRequestUpdate(msg);
       };
-      ConnectionRequestHandler.getRequestUpdate(msg);
+
       ws.onopen = () => {
         console.log("WebSocket connected successfully!");
       };
