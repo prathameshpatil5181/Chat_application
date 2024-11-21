@@ -25,7 +25,6 @@ const GroupChatPage = () => {
   const chatRef = useRef<HTMLDivElement>(null);
 
   const handlemsg = () => {
-    console.log("handling msg");
     if (active?.gid) {
       let msgarr = msg.filter((m) => m.to === active.gid);
       setMessages(msgarr);

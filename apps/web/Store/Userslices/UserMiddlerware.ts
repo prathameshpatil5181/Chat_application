@@ -49,7 +49,7 @@ export const setReceiver = (
   user: string
 ): ThunkAction<void, RootState, unknown, UnknownAction> => {
   return async (dispatch, getState) => {
-    let userInfo = getState().userCon.users.find((x) => x.id === user);
+    let userInfo = getState().userCon.users.find((x) => x.emailId === user);
     if (!userInfo) {
       try {
         const response = await fetch(`${Serverurl}/searchUser/searchone`, {
@@ -60,7 +60,7 @@ export const setReceiver = (
           },
           body: JSON.stringify({
             search: user,
-          }),
+          }), 
         });
 
         const jsonResponse = await response.json();

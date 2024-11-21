@@ -1,11 +1,15 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import profileimage from "../../public/profile.jpg";
 import Image from "next/image";
 import MenuThreeDots from "../../SVG/MenuThreeDots";
 import { useAppSelector } from "../../Store/hooks";
 const ChatNav: React.FC = () => {
   const name = useAppSelector((state) => state.sender);
+  
+  useEffect(() => {
+    
+  },[name])
 
   return (
     <div className="p-1 border-b-1 border-gray-400 bg-white h-full w-full">

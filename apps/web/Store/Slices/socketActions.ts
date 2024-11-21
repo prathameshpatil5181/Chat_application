@@ -6,6 +6,7 @@ import { SocketActions } from "./SocketSlice";
 import { userConnectionActions } from "../Userslices/UserConnection";
 import { GroupActions } from "../GroupSlice/GroupSlice";
 import { Serverurl } from "../../Utils/UtilityFunctions";
+import { ConnectionRequestHandler } from "../../Functions/ConnectionRequestHandler";
 export const setSocket = (): ThunkAction<
   void,
   RootState,
@@ -15,16 +16,29 @@ export const setSocket = (): ThunkAction<
   return (dispatch, getState) => {
     const state = getState();
 
+
     if (!state.webSoc.isConnected) {
       const ws = Wsocket;
       dispatch(SocketActions.setSocketConnection(true));
+
+      const msg = {
+        channel: "REQUEST",
+        type: "REQUESTUPDATE",
+        from: "",
+      };
+      ConnectionRequestHandler.getRequestUpdate(msg);
       ws.onopen = () => {
-        // console.log("WebSocket connected successfully!");
+        console.log("WebSocket connected successfully!");
       };
 
       ws.onmessage = async (event) => {
         const message = await event.data;
         const jsonMsg = JSON.parse(message);
+
+        if (jsonMsg.channel === "REQUEST") {
+          ConnectionRequestHandler.handleConnectionRequest(jsonMsg, dispatch);
+          return;
+        }
 
         if (jsonMsg.group) {
           //dispatch groupmsg
@@ -66,7 +80,7 @@ export const setSocket = (): ThunkAction<
         }
 
         const user = getState().userCon.users.find(
-          (user) => user.id === jsonMsg.from
+          (user) => user.emailId === jsonMsg.from
         );
         if (!user) {
           // console.log("inside the user not availiable");
@@ -131,11 +145,11 @@ export const sendWsMessage = (msg: {
 };
 
 export const sendWsChatMessage = (msg: {
-    message: string,
-        type: string,
-        sentTime: Date,
-        to: string,
-        Members: string[]
+  message: string;
+  type: string;
+  sentTime: Date;
+  to: string;
+  Members: string[];
 }): ThunkAction<void, RootState, unknown, UnknownAction> => {
   return () => {
     const stringifyMsg = JSON.stringify(msg);

@@ -6,8 +6,10 @@ import UserConnectionSlice from "./Userslices/UserConnection";
 import { IuserState } from "./Userslices/userSlice";
 import { IuserConnectionState } from "./Userslices/UserConnection";
 import { IGpIstate } from "./GroupSlice/GroupSlice";
+import { IRequestSlice } from "./Userslices/RequestSlice";
 import GroupSlice from "./GroupSlice/GroupSlice";
 import userSlice from "./Userslices/userSlice";
+import RequestSlice from "./Userslices/RequestSlice";
 const Store = configureStore({
   reducer: {
     model: ModelSlice.reducer,
@@ -16,6 +18,7 @@ const Store = configureStore({
     sender: SenderDetailsSlice.reducer,
     userCon: UserConnectionSlice.reducer,
     group: GroupSlice.reducer,
+    request: RequestSlice.reducer,
   },
 });
 

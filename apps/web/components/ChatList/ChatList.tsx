@@ -2,6 +2,8 @@
 import ChatCard from "../ChatCard/ChatCard";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "../../Store/hooks";
+import { setReceiver } from "../../Store/Userslices/UserMiddlerware";
+import { useAppDispatch } from "../../Store/hooks";
 interface Iconnections {
   emailId: string;
   name: string;
@@ -20,9 +22,10 @@ const ChatList: React.FC = () => {
   const router = useRouter();
   const conns = useAppSelector((state) => state.userCon.users);
   const groups = useAppSelector(state => state.group.groups);
-  // const dispatch = useAppDispatch();
+const dispatch = useAppDispatch();
   const chatHandler = (user: Iconnections) => {
-    router.push(`/Home/${user.id}`);
+    dispatch(setReceiver(user.emailId));
+    router.push(`/Home/${user.emailId}`);
   };
 
   const GroupchatHandler = (id: gphandler) => {

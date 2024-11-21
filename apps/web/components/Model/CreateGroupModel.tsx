@@ -41,7 +41,7 @@ const CreateGroupModel: React.FC = () => {
         //     dispatch(ModelActions.hideModel());
         //     route.push(`/Home/${result.id}`);
             //   }
-            console.log(requestJson);
+  
         } catch (error) {
           console.log("error");
         }

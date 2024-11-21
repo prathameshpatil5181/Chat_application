@@ -13,7 +13,7 @@ const SocketSlice = createSlice({
       console.log('Socket Connected');
     },
     receivedMessage() {
-      console.log('received');
+      // console.log('received');
     },
     sendMessage(state) {
       //@ts-ignore

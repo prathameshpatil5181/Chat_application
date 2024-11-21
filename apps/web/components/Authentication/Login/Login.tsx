@@ -83,25 +83,28 @@ const Login: React.FC = () => {
         });
 
         if (response.status !== 200) {
-          console.log(response.statusText);
           setIsLoggedIn(true);
           setLoginResult(`Issue logging in due to ${response.status}`);
           throw new Error(`Issue loging in due to ${response.status}`);
         }
+        
 
         const jsonResponse = await response.json();
 
+
         if (jsonResponse.message === "User logged in successfully") {
+
+          setlocalStorage("chat-token", jsonResponse.token);
+          setlocalStorage("userEmail",email.value);
           if (checked) {
             setlocalStorage("chat-x-email", email.value);
           }
 
-          router.push("/Home/all");
+          router.push("/Home/chat");
           return;
         }
         setIsLoggedIn(true);
         setLoginResult("Invalid EmailId or Password");
-        console.log(jsonResponse);
       } catch (error) {
         setIsLogging((prevState) => !prevState);
         console.log(error);

@@ -78,7 +78,7 @@ const Signup: React.FC = () => {
         const jsonResponse = await response.json();
         if (jsonResponse.result === true) {
           localStorage.setItem("auth", jsonResponse.status);
-          route.push("/Home/all");
+          route.push("/Home/chat");
 
           return;
         }

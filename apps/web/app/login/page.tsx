@@ -11,16 +11,14 @@ const Loginpage = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const RedirectHandler = async () => {
-    console.log("in loggin page");
+  const RedirectHandler = async () => {;
     const response = await setUserDetail();
-    console.log(response);
     if (response.success === false && response.status !== 200) {
       router.push("/login");
       return;
     }
     dispatch(userDetailActions.setUser(response.result));
-    router.push("/Home/all");
+    router.push("/Home/chat");
   };
 
   useEffect(() => {

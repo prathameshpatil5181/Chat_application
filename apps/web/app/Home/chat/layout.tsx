@@ -1,7 +1,7 @@
 "use client";
 
 import Navigation from "../../../components/Navigation/Navigation";
-import FooterNavigation from "../../../components/Navigation/FooterNavigation";
+// import FooterNavigation from "../../../components/Navigation/FooterNavigation";
 import { useAppSelector } from "../../../Store/hooks";
 import ModelWrapper from "../../../components/Model/ModelWrapper";
 import AddPeopleModel from "../../../components/Model/AddPeopleModel";
@@ -35,7 +35,7 @@ export default function HomeLayout({
           delay: 0.5,
         }}
       >
-        <div className="grid grid-rows-[13%,80%,7%] w-full h-full ">
+        <div className="grid grid-rows-[13%,87%] w-full h-full ">
           {isVisible.isVisible && (
             <div className="w-full h-full absolute backdrop-blur-sm flex items-center justify-center overflow-scroll">
               <ModelWrapper className="">
@@ -51,9 +51,9 @@ export default function HomeLayout({
             <Navigation />
           </div>
           <div className="no-scrollbar h-fit w-full">{children}</div>
-          <div>
+          {/* <div>
             <FooterNavigation />
-          </div>
+          </div> */}
         </div>
         {!isVisible.isVisible && (
           <div
