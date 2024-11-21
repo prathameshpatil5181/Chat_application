@@ -28,7 +28,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [messages, setMessages] = useState<string[]>([]);
   const sendMessage: ISocketContext["sendMessage"] = useCallback(
     (msg) => {
-      console.log("send message", msg);
+
       if (socket) {
         socket.emit("chat", { message: msg });
       }

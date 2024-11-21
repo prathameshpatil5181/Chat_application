@@ -78,7 +78,7 @@ const ProfilePhoto: React.FC<IProfilePhoto> = (props) => {
 
       //@ts-ignore
       imageData.append("image", file);
-      console.log(imageData);
+  
       // try {
       //   const response = await fetch(
       //     "http://localhost:8000/user/updateprofileimage",

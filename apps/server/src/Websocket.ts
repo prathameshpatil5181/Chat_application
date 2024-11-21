@@ -4,6 +4,10 @@ import { Connection } from "./connection";
 import internal from "stream";
 export const connections = new Map<string, Connection>();
 import { Redis } from "ioredis";
+import { ConnectionRequestClass } from "./Handlers/ConnectionRequestHandler";
+
+
+
 export const subscriber = new Redis({
   host: "redis-120b094d-chatapp-redis.a.aivencloud.com",
   port: 12706,
@@ -18,10 +22,12 @@ class websocketconnection {
   constructor(server: http.Server) {
     this._ws = new WebSocketServer({ server });
     server.on("upgrade", (request, socket, head) => {
-      this.ValidateRequest(request, socket, head);
+       this.ValidateRequest(request, socket, head);
     });
+    console.log("called again");
     subscriber.subscribe("MESSAGES");
     subscriber.subscribe("GROUP");
+    subscriber.subscribe("REQUEST");
   }
 
   get connection() {
@@ -59,11 +65,15 @@ class websocketconnection {
         case "GROUP":
           this.GroupMessageHandler(messages);
           break;
+        case "REQUEST":
+          ConnectionRequestClass.connectRequestHandler(messages);
+          break
+          
       }
     });
   }
 
-  ChatMessageHandler = (messages: string) => {
+  public ChatMessageHandler = (messages: string) => {
     const message = JSON.parse(messages);
     const client: Connection | undefined = connections.get(message.to);
     
@@ -82,7 +92,7 @@ class websocketconnection {
     client?.con.send(JSON.stringify(send));
   };
 
-  GroupMessageHandler = (messages: string) => {
+  public GroupMessageHandler = (messages: string) => {
     const message = JSON.parse(messages);
 
     let send = {
@@ -104,7 +114,7 @@ class websocketconnection {
     console.log('group message handler');
   };
 
-  ValidateRequest = (
+  public ValidateRequest = (
     req: http.IncomingMessage,
     socket: internal.Duplex,
     head: Buffer
@@ -119,6 +129,16 @@ class websocketconnection {
       });
     }
   };
+
+
+  public RequestHandler = () => {
+     
+    
+
+  }
+
+
+
 }
 
 export default websocketconnection;

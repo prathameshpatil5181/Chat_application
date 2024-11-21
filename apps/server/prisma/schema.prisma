@@ -81,3 +81,11 @@ model GrroupMessages{
    members String[] 
   @@map("group_messages") 
 }
+model Requests{
+  rid String @id @default(uuid())
+  from String
+  to String
+  status String
+  createdAt DateTime @default(now())
+  @@index([to(sort:Desc), from]) 
+}

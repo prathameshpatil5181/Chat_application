@@ -37,7 +37,7 @@ export const AddUserModel = async (
         connections: true,
         name:true
       },
-      where: {
+      where: {  
         emailId: user,
       },
     });

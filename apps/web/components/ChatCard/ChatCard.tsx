@@ -18,7 +18,6 @@ const ChatCard: React.FC<demodateType> = ({ name, lastchat, lasttime, profimage 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     console.log(e.button);
-    console.log("clicked");
   };
   const refMenu = useRef<HTMLDivElement>(null);
   useEffect(() => {

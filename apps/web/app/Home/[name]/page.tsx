@@ -15,8 +15,6 @@ const Chatpage = () => {
   //@ts-ignore
   const user: string = decodeURIComponent(id.name);
   const currentReceiver = useAppSelector((state) => state.sender);
-  console.log("current");
-  console.log(currentReceiver);
     // if (currentReceiver.emailId === "") {
     //   console.log("current in");
     //   navigation.push("/Home/all");

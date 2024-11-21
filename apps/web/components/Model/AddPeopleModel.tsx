@@ -5,14 +5,13 @@ import ModelChatCard from "./ModelChatCard";
 import SearchSvg from "../../SVG/footersvg/SearchSvg";
 import { motion } from "framer-motion";
 import { debounce } from "../../Utils/UtilityFunctions";
-import { useRouter } from "next/navigation";
-import { useAppDispatch } from "../../Store/hooks";
-
 import { useAppSelector } from "../../Store/hooks";
-import { ModelActions } from "../../Store/UiSlices/ModelSlice";
+import { useDispatch } from "react-redux";
 import { Serverurl } from "../../Utils/UtilityFunctions";
-import { setReceiver } from "../../Store/Userslices/UserMiddlerware";
 import LoadingSpinnerSvg from "../../SVG/LoadingSpinnerSvg";
+import { ConnectionRequestHandler } from "../../Functions/ConnectionRequestHandler";
+import { ModelActions } from "../../Store/UiSlices/ModelSlice";
+
 interface Imodelchatcard {
   name: string;
   emailId: string;
@@ -26,10 +25,10 @@ const AddPeopleModel: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searched, setIsSearched] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
-  const route = useRouter();
-  const dispatch = useAppDispatch();
   const UserConnectionState = useAppSelector((state) => state.userCon.users);
+  const userDet = useAppSelector((state) => state.user);
   const getResult = async () => {
     setIsLoading(true);
     setIsSearched(true);
@@ -50,7 +49,7 @@ const AddPeopleModel: React.FC = () => {
         throw new Error("Failed to fetch data");
       }
 
-      const jsonResponse = await response.json(); 
+      const jsonResponse = await response.json();
 
       if (jsonResponse.result !== false && jsonResponse.result !== "empty") {
         setusers(jsonResponse.result);
@@ -69,12 +68,18 @@ const AddPeopleModel: React.FC = () => {
   const addUserHandler = async (result: Imodelchatcard) => {
     const user = UserConnectionState.find((x) => x.emailId === result.emailId);
 
-    if (user) {
-      dispatch(setReceiver(result.emailId));
-      route.push(`/Home/${result.emailId}`);
-      return;
+    if (!user) {
+      ConnectionRequestHandler.handleConnectionRequest(
+        {
+          type: "CONNECT",
+          to: result.emailId,
+          from: userDet.emailId,
+        },
+        dispatch
+      );
+      dispatch(ModelActions.hideModel());
     }
-
+    dispatch(ModelActions.hideModel());
     // try {
     //   const requestResult = await fetch(`${Serverurl}/user/addUser`, {
     //     method: "POST",
@@ -100,9 +105,9 @@ const AddPeopleModel: React.FC = () => {
     // } catch (error) {
     //   console.log("error");
     // }
-    dispatch(ModelActions.hideModel());
-    dispatch(setReceiver(result.emailId));
-    route.push(`/Home/${result.emailId}`);
+    // dispatch(ModelActions.hideModel());
+    // dispatch(setReceiver(result.emailId));
+    // route.push(`/Home/${result.emailId}`);
   };
 
   return (

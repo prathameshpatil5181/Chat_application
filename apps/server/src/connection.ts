@@ -8,7 +8,7 @@ import { publisher } from "./classes/RedisClass";
 import { InsertMessage } from "./Models/MessageModels/MessageModel";
 import { insertGroupChatMessage } from "./Models/GroupModels/GroupModel";
 import { GetUserModel, IGetUserModel } from "./Models/userModels/GetUserDetails";
-import { channel } from "diagnostics_channel";
+import { ConnectionRequestClass } from "./Handlers/ConnectionRequestHandler";
 
 export class Connection {
   private conn: WebSocket;
@@ -44,13 +44,24 @@ export class Connection {
   };
 
   messageHandler = async (data: WebSocket.RawData, isBinary: boolean) => {
+
+    
+
     if (!isJson(data.toString())) return;
 
+
     const message = JSON.parse(data.toString());
+    console.log("inside message");
+    console.log(message);
+
+    if (message.channel == "REQUEST") {
+      ConnectionRequestClass.ConnectionRequestHandler(message);
+      return;
+    }
 
     if (message.Members) {
       const groupData = JSON.stringify(message);
-      this.handleGroupMessage(groupData);
+      this.handleGroupMessage(groupData); 
     } else {
       this.handleChatMessage(data);
     }
